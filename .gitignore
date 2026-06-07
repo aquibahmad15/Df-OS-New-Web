@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local reference guides & assets source folders
+/Df-OS Final Logo (1)/
+/Df-OS Website Development Project Rules v2.docx
+/Df-OS Website Visuals Guide.docx
+/UI:UX Visby - AI Technology Website/
+/Visuals/
+/Website Content/
+/scratch/
