@@ -32,6 +32,39 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Warehouse
 };
 
+// Department accent color map (matches factory-intelligence-data.ts accentColor)
+const DEPT_ACCENTS: Record<string, string> = {
+  production: "#F6C96D",
+  quality: "#7CFFCB",
+  maintenance: "#FFB84D",
+  safety: "#FF6B6B",
+  utility: "#7CFFCB",
+  "supply-chain": "#B69CFF",
+  esg: "#A3FF7A"
+};
+
+// Helper: hex to rgba
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+// Palette constants
+const CARBON_BLACK = "rgba(7, 11, 18, 0.86)";
+const GRAPHITE_FILL = "rgba(11, 18, 32, 0.88)";
+const SECONDARY_FILL = "rgba(7, 11, 18, 0.72)";
+const PLATINUM = "#F8FAFC";
+const MUTED_SILVER = "#A8B3C7";
+const SOFT_WHITE_LINE = "rgba(248, 250, 252, 0.18)";
+const SOFT_WHITE_DIM = "rgba(248, 250, 252, 0.08)";
+const CORE_BLUE = "#1E6BFF";
+const MINT = "#7CFFCB";
+const GOLD = "#F6C96D";
+const AMBER_WARN = "#FFB84D";
+const CORAL = "#FF6B6B";
+
 interface FactoryIntelligenceConstellationProps {
   activeStage: number;
 }
@@ -49,7 +82,6 @@ export default function FactoryIntelligenceConstellation({
     const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mediaQuery.addEventListener("change", listener);
     
-    // Set initial value inside a timeout to avoid synchronous rendering/layout warnings
     const timer = setTimeout(() => {
       setPrefersReducedMotion(mediaQuery.matches);
     }, 0);
@@ -64,7 +96,6 @@ export default function FactoryIntelligenceConstellation({
 
   useEffect(() => {
     if (prefersReducedMotion) {
-      // Immediate opacity changes for reduced motion
       gsap.killTweensOf(".constellation-element");
       return;
     }
@@ -74,7 +105,6 @@ export default function FactoryIntelligenceConstellation({
 
       // --- BRAND MODE ---
       if (mode === "brand") {
-        // Reset everything to standard calm state
         gsap.to(".core-halo", { scale: 1, opacity: 0.15, duration: 0.8 });
         gsap.to(".core-pulse-circle", { scale: 1.2, opacity: 0, repeat: -1, duration: 3, ease: "power1.out" });
         
@@ -91,27 +121,27 @@ export default function FactoryIntelligenceConstellation({
           gsap.to(`.core-line-${dept.id}`, {
             strokeDashoffset: 0,
             opacity: isActive ? 0.45 : 0.1,
-            stroke: "rgba(30, 107, 255, 0.4)",
+            stroke: SOFT_WHITE_LINE,
             duration: 0.6
           });
 
           dept.modules.forEach((mod) => {
             const isModActive = currentState.activeModules.includes(mod.id);
+            const isPrimary = mod.priority === "primary";
             gsap.to(`.chip-mod-${mod.id}`, {
-              opacity: isModActive ? 0.95 : 0,
+              opacity: isModActive ? (isPrimary ? 0.95 : 0.65) : 0,
               scale: isModActive ? 1 : 0.8,
               x: 0,
               y: 0,
               duration: 0.5
             });
             gsap.to(`.mod-line-${mod.id}`, {
-              opacity: isModActive ? 0.3 : 0,
+              opacity: isModActive ? (isPrimary ? 0.3 : 0.15) : 0,
               duration: 0.5
             });
           });
         });
 
-        // Hide links, signals, fragments
         gsap.to(".cross-link-path", { opacity: 0, duration: 0.4 });
         gsap.to(".external-fragment", { opacity: 0, scale: 0.7, y: 15, duration: 0.4 });
         gsap.to(".query-overlay", { opacity: 0, scale: 0.9, y: 10, duration: 0.4 });
@@ -121,10 +151,8 @@ export default function FactoryIntelligenceConstellation({
 
       // --- CHAOS MODE ---
       if (mode === "chaos") {
-        // Df-OS core dimmed
         gsap.to(".core-halo", { scale: 0.9, opacity: 0.05, duration: 0.6 });
         
-        // Departments drift slightly and turn warnings/muted
         departments.forEach((dept, idx) => {
           const isActive = currentState.activeDepartments.includes(dept.id);
           const driftX = Math.sin(idx) * 8;
@@ -142,7 +170,7 @@ export default function FactoryIntelligenceConstellation({
 
           gsap.to(`.core-line-${dept.id}`, {
             opacity: isActive ? 0.2 : 0.05,
-            stroke: isWarning ? "#FF5A6B" : "rgba(30, 107, 255, 0.2)",
+            stroke: isWarning ? CORAL : SOFT_WHITE_DIM,
             duration: 0.8
           });
 
@@ -165,7 +193,6 @@ export default function FactoryIntelligenceConstellation({
           });
         });
 
-        // Show fragmented files (Excel, Whatsapp, Paper logbook)
         gsap.to(".external-fragment", {
           opacity: 1,
           scale: 1,
@@ -175,7 +202,6 @@ export default function FactoryIntelligenceConstellation({
           ease: "back.out(1.2)"
         });
 
-        // Hide query and links
         gsap.to(".cross-link-path", { opacity: 0, duration: 0.4 });
         gsap.to(".query-overlay", { opacity: 0, scale: 0.9, duration: 0.4 });
         gsap.to(".recommendation-overlay", { opacity: 0, scale: 0.9, duration: 0.4 });
@@ -184,11 +210,11 @@ export default function FactoryIntelligenceConstellation({
 
       // --- OPERATING LAYER MODE ---
       if (mode === "operating-layer") {
-        // Reconnect core, snap back departments
         gsap.to(".core-halo", { scale: 1.1, opacity: 0.25, duration: 0.8 });
         
         departments.forEach((dept) => {
           const isActive = currentState.activeDepartments.includes(dept.id);
+          const accent = DEPT_ACCENTS[dept.id] || PLATINUM;
           gsap.to(`.node-dept-${dept.id}`, {
             opacity: isActive ? 1 : 0.2,
             scale: 1,
@@ -198,39 +224,38 @@ export default function FactoryIntelligenceConstellation({
             ease: "back.out(1.5)"
           });
           gsap.to(`.core-line-${dept.id}`, {
-            opacity: isActive ? 0.7 : 0.05,
-            stroke: "rgba(25, 212, 255, 0.6)",
+            opacity: isActive ? 0.55 : 0.05,
+            stroke: isActive ? hexToRgba(accent, 0.5) : SOFT_WHITE_DIM,
             duration: 0.7
           });
 
           dept.modules.forEach((mod) => {
             const isModActive = currentState.activeModules.includes(mod.id);
+            const isPrimary = mod.priority === "primary";
             gsap.to(`.chip-mod-${mod.id}`, {
-              opacity: isModActive ? 0.95 : 0,
+              opacity: isModActive ? (isPrimary ? 0.95 : 0.7) : 0,
               scale: isModActive ? 1 : 0.8,
               x: 0,
               y: 0,
               duration: 0.6
             });
             gsap.to(`.mod-line-${mod.id}`, {
-              opacity: isModActive ? 0.4 : 0,
+              opacity: isModActive ? (isPrimary ? 0.4 : 0.2) : 0,
               duration: 0.6
             });
           });
         });
 
-        // Highlight cross-links
         crossLinks.forEach((link) => {
           const isHighlighted = currentState.highlightedLinks.includes(link.id);
           gsap.to(`.link-path-${link.id}`, {
             opacity: isHighlighted ? 0.75 : 0.08,
-            stroke: isHighlighted ? "#19D4FF" : "rgba(159, 180, 211, 0.15)",
+            stroke: isHighlighted ? GOLD : SOFT_WHITE_DIM,
             strokeWidth: isHighlighted ? 1.5 : 1,
             duration: 0.8
           });
         });
 
-        // Hide chaos files, query, and stack
         gsap.to(".external-fragment", { opacity: 0, scale: 0.7, duration: 0.4 });
         gsap.to(".query-overlay", { opacity: 0, duration: 0.4 });
         gsap.to(".recommendation-overlay", { opacity: 0, duration: 0.4 });
@@ -239,7 +264,6 @@ export default function FactoryIntelligenceConstellation({
 
       // --- INTELLIGENCE MODE ---
       if (mode === "intelligence") {
-        // Vish AI Halo active
         gsap.to(".core-halo", { scale: 1.3, opacity: 0.45, duration: 0.8 });
         
         departments.forEach((dept) => {
@@ -252,39 +276,38 @@ export default function FactoryIntelligenceConstellation({
             duration: 0.7
           });
           gsap.to(`.core-line-${dept.id}`, {
-            opacity: isActive ? 0.8 : 0.05,
-            stroke: "rgba(51, 230, 161, 0.6)", // Signal Green
+            opacity: isActive ? 0.7 : 0.05,
+            stroke: isActive ? hexToRgba(MINT, 0.6) : SOFT_WHITE_DIM,
             duration: 0.7
           });
 
           dept.modules.forEach((mod) => {
             const isModActive = currentState.activeModules.includes(mod.id);
+            const isPrimary = mod.priority === "primary";
             gsap.to(`.chip-mod-${mod.id}`, {
-              opacity: isModActive ? 0.95 : 0,
+              opacity: isModActive ? (isPrimary ? 0.95 : 0.7) : 0,
               scale: isModActive ? 1 : 0.7,
               x: 0,
               y: 0,
               duration: 0.6
             });
             gsap.to(`.mod-line-${mod.id}`, {
-              opacity: isModActive ? 0.45 : 0,
+              opacity: isModActive ? (isPrimary ? 0.45 : 0.2) : 0,
               duration: 0.6
             });
           });
         });
 
-        // Cross-links active path
         crossLinks.forEach((link) => {
           const isHighlighted = currentState.highlightedLinks.includes(link.id);
           gsap.to(`.link-path-${link.id}`, {
             opacity: isHighlighted ? 0.85 : 0.05,
-            stroke: isHighlighted ? "#33E6A1" : "rgba(159, 180, 211, 0.1)",
+            stroke: isHighlighted ? MINT : SOFT_WHITE_DIM,
             strokeWidth: isHighlighted ? 2 : 1,
             duration: 0.7
           });
         });
 
-        // Show Query & Recommendation overlay cards
         gsap.to(".query-overlay", {
           opacity: 1,
           scale: 1,
@@ -302,7 +325,6 @@ export default function FactoryIntelligenceConstellation({
           delay: 0.3
         });
 
-        // Hide chaos and stack layers
         gsap.to(".external-fragment", { opacity: 0, scale: 0.7, duration: 0.4 });
         gsap.to(".stack-signals", { opacity: 0, duration: 0.4 });
       }
@@ -321,22 +343,23 @@ export default function FactoryIntelligenceConstellation({
             duration: 0.6
           });
           gsap.to(`.core-line-${dept.id}`, {
-            opacity: isActive ? 0.6 : 0.1,
-            stroke: "rgba(30, 107, 255, 0.4)",
+            opacity: isActive ? 0.5 : 0.1,
+            stroke: SOFT_WHITE_LINE,
             duration: 0.6
           });
 
           dept.modules.forEach((mod) => {
             const isModActive = currentState.activeModules.includes(mod.id);
+            const isPrimary = mod.priority === "primary";
             gsap.to(`.chip-mod-${mod.id}`, {
-              opacity: isModActive ? 0.95 : 0,
+              opacity: isModActive ? (isPrimary ? 0.95 : 0.65) : 0,
               scale: isModActive ? 1 : 0.8,
               x: 0,
               y: 0,
               duration: 0.5
             });
             gsap.to(`.mod-line-${mod.id}`, {
-              opacity: isModActive ? 0.35 : 0,
+              opacity: isModActive ? (isPrimary ? 0.35 : 0.15) : 0,
               duration: 0.5
             });
           });
@@ -346,19 +369,17 @@ export default function FactoryIntelligenceConstellation({
           const isHighlighted = currentState.highlightedLinks.includes(link.id);
           gsap.to(`.link-path-${link.id}`, {
             opacity: isHighlighted ? 0.75 : 0.1,
-            stroke: isHighlighted ? "#19D4FF" : "rgba(159, 180, 211, 0.15)",
+            stroke: isHighlighted ? GOLD : SOFT_WHITE_DIM,
             strokeWidth: isHighlighted ? 1.5 : 1,
             duration: 0.6
           });
         });
 
-        // Reveal bottom signal ingress / top Vish AI stack labels
         gsap.to(".stack-signals", {
           opacity: 1,
           duration: 0.6
         });
 
-        // Hide query and fragments
         gsap.to(".external-fragment", { opacity: 0, scale: 0.7, duration: 0.4 });
         gsap.to(".query-overlay", { opacity: 0, scale: 0.9, duration: 0.4 });
         gsap.to(".recommendation-overlay", { opacity: 0, scale: 0.9, duration: 0.4 });
@@ -381,6 +402,14 @@ export default function FactoryIntelligenceConstellation({
       ref={containerRef}
       className="relative w-full h-full flex items-center justify-center select-none"
     >
+      {/* Dark radial backdrop for video isolation */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
+        style={{
+          background: "radial-gradient(circle at center, rgba(2, 6, 14, 0.7) 0%, rgba(2, 6, 14, 0.3) 50%, transparent 80%)"
+        }}
+      />
+
       {/* SVG Master Drawing Canvas */}
       <svg
         ref={svgRef}
@@ -388,14 +417,16 @@ export default function FactoryIntelligenceConstellation({
         className="w-[490px] h-[490px] overflow-visible z-10 relative"
       >
         <defs>
-          {/* Radial Glow Filters */}
+          {/* Core glow - Brand Blue */}
           <filter id="core-glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="12" result="blur" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.12  0 0 0 0 0.42  0 0 0 0 1  0 0 0 1 0" />
             <feMerge>
-              <feMergeNode in="blur" />
+              <feMergeNode />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          {/* Node glow - warm neutral */}
           <filter id="node-glow" x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="6" result="blur" />
             <feMerge>
@@ -403,9 +434,19 @@ export default function FactoryIntelligenceConstellation({
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          {/* AI glow - Mint green */}
           <filter id="ai-glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="15" result="blur" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0.2   0 0 0 0 0.9   0 0 0 0 0.6  0 0 0 1 0" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.49  0 0 0 0 1  0 0 0 0 0.80  0 0 0 1 0" />
+            <feMerge>
+              <feMergeNode />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          {/* Gold glow for highlighted cross-links */}
+          <filter id="gold-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0.96  0 0 0 0 0.79  0 0 0 0 0.43  0 0 0 0.6 0" />
             <feMerge>
               <feMergeNode />
               <feMergeNode in="SourceGraphic" />
@@ -416,35 +457,35 @@ export default function FactoryIntelligenceConstellation({
         {/* --- Background Stack Components (Slide 5 Only) --- */}
         <g className="stack-signals opacity-0 transition-opacity duration-300">
           {/* Bottom ingress sensor lines */}
-          <path d="M 100 500 Q 110 420 125 365" fill="none" stroke="rgba(25, 212, 255, 0.45)" strokeWidth="1" strokeDasharray="3 5" />
-          <path d="M 250 500 Q 250 450 250 415" fill="none" stroke="rgba(25, 212, 255, 0.45)" strokeWidth="1" strokeDasharray="3 5" />
-          <path d="M 400 500 Q 390 420 375 365" fill="none" stroke="rgba(25, 212, 255, 0.45)" strokeWidth="1" strokeDasharray="3 5" />
+          <path d="M 100 500 Q 110 420 125 365" fill="none" stroke={hexToRgba(AMBER_WARN, 0.45)} strokeWidth="1" strokeDasharray="3 5" />
+          <path d="M 250 500 Q 250 450 250 415" fill="none" stroke={hexToRgba(AMBER_WARN, 0.45)} strokeWidth="1" strokeDasharray="3 5" />
+          <path d="M 400 500 Q 390 420 375 365" fill="none" stroke={hexToRgba(AMBER_WARN, 0.45)} strokeWidth="1" strokeDasharray="3 5" />
           
           {/* Flow packets upward */}
           {!prefersReducedMotion && (
             <>
-              <circle r="2" fill="#19D4FF">
+              <circle r="2" fill={GOLD}>
                 <animateMotion dur="2.5s" repeatCount="indefinite" path="M 100 500 Q 110 420 125 365" />
               </circle>
-              <circle r="2" fill="#19D4FF">
+              <circle r="2" fill={GOLD}>
                 <animateMotion dur="2s" repeatCount="indefinite" path="M 250 500 Q 250 450 250 415" />
               </circle>
-              <circle r="2" fill="#19D4FF">
+              <circle r="2" fill={GOLD}>
                 <animateMotion dur="2.8s" repeatCount="indefinite" path="M 400 500 Q 390 420 375 365" />
               </circle>
             </>
           )}
 
           {/* Bottom signal entry markers */}
-          <rect x="75" y="470" width="100" height="22" rx="4" fill="rgba(4, 21, 46, 0.85)" stroke="rgba(25, 212, 255, 0.2)" strokeWidth="1" />
-          <text x="125" y="484" fill="#9FB4D3" fontSize="8" fontFamily="monospace" textAnchor="middle" fontWeight="bold">PLC & SENSORS</text>
+          <rect x="75" y="470" width="100" height="22" rx="4" fill={CARBON_BLACK} stroke={hexToRgba(AMBER_WARN, 0.3)} strokeWidth="1" />
+          <text x="125" y="484" fill={AMBER_WARN} fontSize="8" fontFamily="monospace" textAnchor="middle" fontWeight="bold">PLC & SENSORS</text>
           
-          <rect x="325" y="470" width="100" height="22" rx="4" fill="rgba(4, 21, 46, 0.85)" stroke="rgba(25, 212, 255, 0.2)" strokeWidth="1" />
-          <text x="375" y="484" fill="#9FB4D3" fontSize="8" fontFamily="monospace" textAnchor="middle" fontWeight="bold">X-KONNECT EDGE</text>
+          <rect x="325" y="470" width="100" height="22" rx="4" fill={CARBON_BLACK} stroke={hexToRgba(GOLD, 0.3)} strokeWidth="1" />
+          <text x="375" y="484" fill={GOLD} fontSize="8" fontFamily="monospace" textAnchor="middle" fontWeight="bold">X-KONNECT EDGE</text>
 
           {/* Top Control Tower Marker */}
-          <rect x="180" y="-8" width="140" height="22" rx="4" fill="rgba(4, 21, 46, 0.9)" stroke="rgba(51, 230, 161, 0.3)" strokeWidth="1" />
-          <text x="250" y="6" fill="#33E6A1" fontSize="8.5" fontFamily="monospace" textAnchor="middle" fontWeight="black" letterSpacing="1">VISH CONTROL TOWER</text>
+          <rect x="180" y="-8" width="140" height="22" rx="4" fill="rgba(7, 11, 18, 0.92)" stroke={hexToRgba(MINT, 0.35)} strokeWidth="1" />
+          <text x="250" y="6" fill={MINT} fontSize="8.5" fontFamily="monospace" textAnchor="middle" fontWeight="black" letterSpacing="1">VISH CONTROL TOWER</text>
         </g>
 
         {/* --- Cross-Department Links --- */}
@@ -454,10 +495,12 @@ export default function FactoryIntelligenceConstellation({
             const toDept = departments.find((d) => d.id === link.to);
             if (!fromDept || !toDept) return null;
             
-            // Calculate organic bezier mid-curve coordinates
             const midX = (fromDept.x + toDept.x) / 2 + (toDept.y - fromDept.y) * 0.12;
             const midY = (fromDept.y + toDept.y) / 2 + (fromDept.x - toDept.x) * 0.12;
             const pathD = `M ${fromDept.x} ${fromDept.y} Q ${midX} ${midY} ${toDept.x} ${toDept.y}`;
+
+            const isHighlighted = currentState.highlightedLinks.includes(link.id);
+            const packetColor = currentState.mode === "intelligence" ? MINT : GOLD;
 
             return (
               <g key={link.id}>
@@ -465,14 +508,14 @@ export default function FactoryIntelligenceConstellation({
                   d={pathD}
                   fill="none"
                   className={`cross-link-path link-path-${link.id} constellation-element`}
-                  stroke="rgba(159, 180, 211, 0.08)"
+                  stroke={SOFT_WHITE_DIM}
                   strokeWidth="1"
                   style={{ transition: "stroke 0.4s, stroke-width 0.4s, opacity 0.4s" }}
                 />
                 
                 {/* Active cross-link packet loops */}
-                {currentState.highlightedLinks.includes(link.id) && !prefersReducedMotion && (
-                  <circle r="2.5" fill="#33E6A1" className="filter drop-shadow-[0_0_4px_#33E6A1]">
+                {isHighlighted && !prefersReducedMotion && (
+                  <circle r="2.5" fill={packetColor} className="filter drop-shadow-[0_0_4px_#F6C96D]">
                     <animateMotion dur="2.2s" repeatCount="indefinite" path={pathD} />
                   </circle>
                 )}
@@ -486,6 +529,9 @@ export default function FactoryIntelligenceConstellation({
           {departments.map((dept) => {
             const isBroken = currentState.showBrokenLinks && ["production", "utility", "maintenance"].includes(dept.id);
             const isActive = currentState.activeDepartments.includes(dept.id);
+            const accent = DEPT_ACCENTS[dept.id] || PLATINUM;
+            const signalColor = currentState.mode === "intelligence" ? MINT : (currentState.mode === "operating-layer" ? hexToRgba(accent, 0.7) : GOLD);
+            
             return (
               <g key={`core-link-${dept.id}`}>
                 <line
@@ -494,7 +540,7 @@ export default function FactoryIntelligenceConstellation({
                   x2={dept.x}
                   y2={dept.y}
                   className={`core-line-${dept.id} constellation-element`}
-                  stroke={isBroken ? "#FF5A6B" : "rgba(30, 107, 255, 0.3)"}
+                  stroke={isBroken ? CORAL : SOFT_WHITE_LINE}
                   strokeWidth={isBroken ? "1" : "1.2"}
                   strokeDasharray={isBroken ? "4 4" : "0"}
                   style={{ transition: "stroke 0.5s, opacity 0.5s" }}
@@ -502,7 +548,7 @@ export default function FactoryIntelligenceConstellation({
 
                 {/* Draw signal flows on active non-broken connections */}
                 {isActive && !isBroken && !prefersReducedMotion && (
-                  <circle r="2" fill={currentState.mode === "intelligence" ? "#33E6A1" : "#19D4FF"}>
+                  <circle r="2" fill={signalColor}>
                     <animateMotion
                       dur="2.8s"
                       repeatCount="indefinite"
@@ -517,8 +563,9 @@ export default function FactoryIntelligenceConstellation({
 
         {/* --- Process Module Linkage Lines --- */}
         <g className="module-links">
-          {departments.map((dept) =>
-            dept.modules.map((mod) => (
+          {departments.map((dept) => {
+            const accent = DEPT_ACCENTS[dept.id] || PLATINUM;
+            return dept.modules.map((mod) => (
               <line
                 key={`mod-line-${mod.id}`}
                 x1={dept.x}
@@ -526,22 +573,26 @@ export default function FactoryIntelligenceConstellation({
                 x2={mod.x}
                 y2={mod.y}
                 className={`mod-line-${mod.id} constellation-element`}
-                stroke="rgba(25, 212, 255, 0.22)"
-                strokeWidth="0.8"
+                stroke={mod.priority === "primary" ? hexToRgba(accent, 0.25) : hexToRgba(MUTED_SILVER, 0.15)}
+                strokeWidth={mod.priority === "primary" ? "0.8" : "0.5"}
                 strokeDasharray="2 4"
                 opacity="0"
                 style={{ transition: "opacity 0.4s" }}
               />
-            ))
-          )}
+            ));
+          })}
         </g>
 
         {/* --- Process Module Chips (Interactive label nodes) --- */}
         <g className="module-chips">
-          {departments.map((dept) =>
-            dept.modules.map((mod) => {
-              const textLength = mod.label.length * 5.2 + 10;
-              const isAlert = currentState.showBrokenLinks && ["non-conformance", "breakdown-rep", "downtime-analysis"].includes(mod.id);
+          {departments.map((dept) => {
+            const accent = DEPT_ACCENTS[dept.id] || PLATINUM;
+            return dept.modules.map((mod) => {
+              const isPrimary = mod.priority === "primary";
+              const fontSize = isPrimary ? 7.5 : 6;
+              const textLength = mod.label.length * (isPrimary ? 5.2 : 4.2) + (isPrimary ? 10 : 8);
+              const chipHeight = isPrimary ? 18 : 14;
+              const isAlert = currentState.showBrokenLinks && ["non-conformance", "breakdown-rep", "downtime-analysis", "changeover-log", "poka-yoke", "jh-tags", "incident-inv", "ppe-compliance", "fuel-tracking"].includes(mod.id);
               
               return (
                 <g
@@ -553,24 +604,24 @@ export default function FactoryIntelligenceConstellation({
                   {/* Glass backing capsule */}
                   <rect
                     x={mod.x - textLength / 2}
-                    y={mod.y - 9}
+                    y={mod.y - chipHeight / 2}
                     width={textLength}
-                    height="18"
-                    rx="9"
-                    fill={isAlert ? "rgba(102, 30, 40, 0.85)" : "rgba(3, 18, 42, 0.82)"}
-                    stroke={isAlert ? "#FF5A6B" : "rgba(25, 212, 255, 0.25)"}
-                    strokeWidth="0.8"
+                    height={chipHeight}
+                    rx={chipHeight / 2}
+                    fill={isAlert ? "rgba(102, 30, 40, 0.85)" : (isPrimary ? GRAPHITE_FILL : SECONDARY_FILL)}
+                    stroke={isAlert ? CORAL : hexToRgba(accent, isPrimary ? 0.45 : 0.2)}
+                    strokeWidth={isPrimary ? "0.8" : "0.5"}
                     className="backdrop-blur-sm"
                   />
                   {/* Label Text */}
                   <text
                     x={mod.x}
-                    y={mod.y + 3}
-                    fill={isAlert ? "#FF5A6B" : "#9FB4D3"}
-                    fontSize="7.5"
+                    y={mod.y + (isPrimary ? 3 : 2.5)}
+                    fill={isAlert ? CORAL : (isPrimary ? PLATINUM : MUTED_SILVER)}
+                    fontSize={fontSize}
                     fontFamily="monospace"
                     textAnchor="middle"
-                    fontWeight="semibold"
+                    fontWeight={isPrimary ? "semibold" : "normal"}
                   >
                     {mod.label}
                   </text>
@@ -581,14 +632,14 @@ export default function FactoryIntelligenceConstellation({
                       cx={mod.x - textLength / 2}
                       cy={mod.y}
                       r="2"
-                      fill="#FF5A6B"
+                      fill={CORAL}
                       className="animate-pulse"
                     />
                   )}
                 </g>
               );
-            })
-          )}
+            });
+          })}
         </g>
 
         {/* --- Department Hub Nodes --- */}
@@ -596,6 +647,7 @@ export default function FactoryIntelligenceConstellation({
           {departments.map((dept) => {
             const isActive = currentState.activeDepartments.includes(dept.id);
             const isBroken = currentState.showBrokenLinks && ["production", "utility", "maintenance"].includes(dept.id);
+            const accent = DEPT_ACCENTS[dept.id] || PLATINUM;
             
             return (
               <g
@@ -603,24 +655,24 @@ export default function FactoryIntelligenceConstellation({
                 className={`node-dept-${dept.id} constellation-element`}
                 style={{ transformBox: "fill-box", transformOrigin: "center" }}
               >
-                {/* Node Ring Halo */}
+                {/* Outer accent halo ring */}
                 <circle
                   cx={dept.x}
                   cy={dept.y}
                   r="26"
                   fill="none"
-                  stroke={isBroken ? "rgba(255, 90, 107, 0.25)" : (isActive ? "rgba(25, 212, 255, 0.22)" : "rgba(81, 163, 255, 0.08)")}
+                  stroke={isBroken ? hexToRgba(CORAL, 0.25) : (isActive ? hexToRgba(accent, 0.22) : hexToRgba(MUTED_SILVER, 0.08))}
                   strokeWidth="1"
                   strokeDasharray={isBroken ? "3 3" : "0"}
                 />
 
-                {/* Node Capsule Backplate */}
+                {/* Node Capsule Backplate — carbon black glass */}
                 <circle
                   cx={dept.x}
                   cy={dept.y}
                   r="21"
-                  fill={isBroken ? "rgba(102, 30, 40, 0.85)" : "rgba(4, 21, 46, 0.8)"}
-                  stroke={isBroken ? "#FF5A6B" : (isActive ? "rgba(25, 212, 255, 0.6)" : "rgba(81, 163, 255, 0.25)")}
+                  fill={isBroken ? "rgba(102, 30, 40, 0.85)" : CARBON_BLACK}
+                  stroke={isBroken ? CORAL : (isActive ? hexToRgba(accent, 0.65) : hexToRgba(MUTED_SILVER, 0.25))}
                   strokeWidth={isActive ? "1.5" : "1"}
                   className="backdrop-blur-md cursor-pointer transition-all duration-300 filter"
                   style={{
@@ -640,14 +692,14 @@ export default function FactoryIntelligenceConstellation({
                   width="60"
                   height="12"
                   rx="3"
-                  fill="rgba(2, 11, 24, 0.9)"
-                  stroke={isBroken ? "rgba(255, 90, 107, 0.3)" : "rgba(81, 163, 255, 0.15)"}
+                  fill="rgba(7, 11, 18, 0.92)"
+                  stroke={isBroken ? hexToRgba(CORAL, 0.3) : hexToRgba(accent, 0.2)}
                   strokeWidth="0.8"
                 />
                 <text
                   x={dept.x}
                   y={dept.y + 34}
-                  fill={isBroken ? "#FF5A6B" : "#F4F8FF"}
+                  fill={isBroken ? CORAL : PLATINUM}
                   fontSize="7"
                   fontFamily="monospace"
                   textAnchor="middle"
@@ -657,11 +709,11 @@ export default function FactoryIntelligenceConstellation({
                   {dept.label}
                 </text>
 
-                {/* Warning Warning Badge on Chaos Stage */}
+                {/* Warning Badge on Chaos Stage */}
                 {isBroken && (
                   <g transform={`translate(${dept.x + 13}, ${dept.y - 20})`}>
-                    <circle cx="5" cy="5" r="7" fill="#FF5A6B" />
-                    <text x="5" y="8.5" fill="#020B18" fontSize="10" fontFamily="sans-serif" fontWeight="black" textAnchor="middle">!</text>
+                    <circle cx="5" cy="5" r="7" fill={CORAL} />
+                    <text x="5" y="8.5" fill="#070B12" fontSize="10" fontFamily="sans-serif" fontWeight="black" textAnchor="middle">!</text>
                   </g>
                 )}
               </g>
@@ -671,18 +723,19 @@ export default function FactoryIntelligenceConstellation({
 
         {/* --- Central Df-OS Core --- */}
         <g className="central-core">
-          {/* Outer Orbit Rings */}
-          <circle cx={CENTER_NODE.x} cy={CENTER_NODE.y} r="60" fill="none" stroke="rgba(25, 212, 255, 0.15)" strokeWidth="1" strokeDasharray="3 6" />
-          <circle cx={CENTER_NODE.x} cy={CENTER_NODE.y} r="75" fill="none" stroke="rgba(25, 212, 255, 0.08)" strokeWidth="1" />
+          {/* Outer Orbit Ring — Gold accent */}
+          <circle cx={CENTER_NODE.x} cy={CENTER_NODE.y} r="75" fill="none" stroke={hexToRgba(GOLD, 0.08)} strokeWidth="1" />
+          {/* Inner Orbit Ring — Platinum dashed */}
+          <circle cx={CENTER_NODE.x} cy={CENTER_NODE.y} r="60" fill="none" stroke={hexToRgba(PLATINUM, 0.12)} strokeWidth="1" strokeDasharray="3 6" />
 
           {/* AI Pulsing Halo Layer (Slide 4 and 5) */}
           <circle
             cx={CENTER_NODE.x}
             cy={CENTER_NODE.y}
             r="48"
-            fill="rgba(51, 230, 161, 0.08)"
+            fill={hexToRgba(MINT, 0.06)}
             className="core-halo constellation-element"
-            stroke="rgba(51, 230, 161, 0.28)"
+            stroke={hexToRgba(MINT, 0.28)}
             strokeWidth="1.5"
             style={{
               filter: "url(#ai-glow)",
@@ -699,19 +752,19 @@ export default function FactoryIntelligenceConstellation({
             cy={CENTER_NODE.y}
             r="38"
             fill="none"
-            stroke="rgba(25, 212, 255, 0.4)"
+            stroke={hexToRgba(CORE_BLUE, 0.4)}
             strokeWidth="1.2"
             className="core-pulse-circle"
             style={{ transformBox: "fill-box", transformOrigin: "center" }}
           />
 
-          {/* Central Monogram Ring */}
+          {/* Central Monogram Ring — Brand Blue */}
           <circle
             cx={CENTER_NODE.x}
             cy={CENTER_NODE.y}
             r="35"
-            fill="rgba(4, 21, 46, 0.95)"
-            stroke={currentState.mode === "chaos" ? "rgba(25, 212, 255, 0.2)" : "rgba(25, 212, 255, 0.85)"}
+            fill="#070B12"
+            stroke={currentState.mode === "chaos" ? hexToRgba(CORE_BLUE, 0.2) : hexToRgba(CORE_BLUE, 0.85)}
             strokeWidth="2"
             className="backdrop-blur-lg filter"
             style={{
@@ -721,14 +774,15 @@ export default function FactoryIntelligenceConstellation({
           />
 
           {/* Central Brain Icon */}
-          <g transform={`translate(${CENTER_NODE.x - 12}, ${CENTER_NODE.y - 12})`} className="opacity-95 text-brand-cyan">
-            <Cpu className="w-6 h-6 text-brand-cyan animate-pulse" />
+          <g transform={`translate(${CENTER_NODE.x - 12}, ${CENTER_NODE.y - 8})`} className="opacity-95">
+            <Cpu className="w-6 h-6 text-white animate-pulse" />
           </g>
 
+          {/* Core Label */}
           <text
             x={CENTER_NODE.x}
-            y={CENTER_NODE.y + 24}
-            fill="#19D4FF"
+            y={CENTER_NODE.y + 22}
+            fill={PLATINUM}
             fontSize="6.5"
             fontFamily="monospace"
             fontWeight="black"
@@ -737,36 +791,50 @@ export default function FactoryIntelligenceConstellation({
           >
             Df-OS CORE
           </text>
+          {/* Sub-label: Factory Operating Layer */}
+          <text
+            x={CENTER_NODE.x}
+            y={CENTER_NODE.y + 31}
+            fill={MUTED_SILVER}
+            fontSize="4.5"
+            fontFamily="monospace"
+            fontWeight="normal"
+            textAnchor="middle"
+            letterSpacing="0.5"
+            opacity="0.7"
+          >
+            FACTORY OPERATING LAYER
+          </text>
         </g>
 
         {/* --- Slide 2 Chaos: External Fragments (Excel, Paper, etc.) --- */}
         <g className="external-fragments">
           {/* Excel Report (Top Right) */}
           <g className="external-fragment constellation-element" opacity="0" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-            <rect x="360" y="20" width="80" height="24" rx="6" fill="rgba(239, 68, 68, 0.08)" stroke="#FF5A6B" strokeWidth="1" className="backdrop-blur-sm" />
-            <text x="400" y="34" fill="#FF5A6B" fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Excel Logbook</text>
-            <path d="M 400 44 L 395 110" fill="none" stroke="#FF5A6B" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
+            <rect x="360" y="20" width="80" height="24" rx="6" fill="rgba(102, 30, 40, 0.15)" stroke={CORAL} strokeWidth="1" className="backdrop-blur-sm" />
+            <text x="400" y="34" fill={CORAL} fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Excel Logbook</text>
+            <path d="M 400 44 L 395 110" fill="none" stroke={CORAL} strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
           </g>
 
           {/* WhatsApp Text (Top Left) */}
           <g className="external-fragment constellation-element" opacity="0" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-            <rect x="50" y="25" width="85" height="24" rx="6" fill="rgba(255, 183, 74, 0.08)" stroke="#FFB74A" strokeWidth="1" className="backdrop-blur-sm" />
-            <text x="92.5" y="39" fill="#FFB74A" fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">WhatsApp Alert</text>
-            <path d="M 92.5 49 L 170 35" fill="none" stroke="#FFB74A" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
+            <rect x="50" y="25" width="85" height="24" rx="6" fill={hexToRgba(AMBER_WARN, 0.08)} stroke={AMBER_WARN} strokeWidth="1" className="backdrop-blur-sm" />
+            <text x="92.5" y="39" fill={AMBER_WARN} fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">WhatsApp Alert</text>
+            <path d="M 92.5 49 L 170 35" fill="none" stroke={AMBER_WARN} strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
           </g>
 
           {/* Paper Permit (Bottom Left) */}
           <g className="external-fragment constellation-element" opacity="0" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-            <rect x="15" y="325" width="70" height="24" rx="6" fill="rgba(239, 68, 68, 0.08)" stroke="#FF5A6B" strokeWidth="1" className="backdrop-blur-sm" />
-            <text x="50" y="339" fill="#FF5A6B" fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Paper Log</text>
-            <path d="M 50 325 L 60 290" fill="none" stroke="#FF5A6B" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
+            <rect x="15" y="325" width="70" height="24" rx="6" fill="rgba(102, 30, 40, 0.15)" stroke={CORAL} strokeWidth="1" className="backdrop-blur-sm" />
+            <text x="50" y="339" fill={CORAL} fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Paper Log</text>
+            <path d="M 50 325 L 60 290" fill="none" stroke={CORAL} strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
           </g>
 
           {/* Local Alarm (Bottom Right) */}
           <g className="external-fragment constellation-element" opacity="0" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-            <rect x="405" y="325" width="80" height="24" rx="6" fill="rgba(255, 183, 74, 0.08)" stroke="#FFB74A" strokeWidth="1" className="backdrop-blur-sm" />
-            <text x="445" y="339" fill="#FFB74A" fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Unlogged Alarm</text>
-            <path d="M 445 325 L 440 300" fill="none" stroke="#FFB74A" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
+            <rect x="405" y="325" width="80" height="24" rx="6" fill={hexToRgba(AMBER_WARN, 0.08)} stroke={AMBER_WARN} strokeWidth="1" className="backdrop-blur-sm" />
+            <text x="445" y="339" fill={AMBER_WARN} fontSize="7" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Unlogged Alarm</text>
+            <path d="M 445 325 L 440 300" fill="none" stroke={AMBER_WARN} strokeWidth="0.8" strokeDasharray="3 3" opacity="0.3" />
           </g>
         </g>
 
@@ -779,9 +847,9 @@ export default function FactoryIntelligenceConstellation({
           className="query-overlay constellation-element pointer-events-none"
           style={{ opacity: 0, transform: "translateY(10px) scale(0.9)", transition: "opacity 0.5s, transform 0.5s" }}
         >
-          <div className="bg-[#0c0c12]/92 border border-brand-green/30 p-3 rounded-xl shadow-2xl flex flex-col gap-1 w-full h-full justify-center">
-            <span className="text-[7.5px] font-mono text-brand-green font-bold uppercase tracking-wider flex items-center gap-1">
-              <MessageSquare className="w-2.5 h-2.5 text-brand-green" /> User query
+          <div className="border p-3 rounded-xl shadow-2xl flex flex-col gap-1 w-full h-full justify-center" style={{ background: 'rgba(7, 11, 18, 0.92)', borderColor: hexToRgba(MINT, 0.3) }}>
+            <span className="text-[7.5px] font-mono font-bold uppercase tracking-wider flex items-center gap-1" style={{ color: MINT }}>
+              <MessageSquare className="w-2.5 h-2.5" style={{ color: MINT }} /> User query
             </span>
             <p className="text-[10px] text-white leading-normal font-sans font-semibold">
               &ldquo;Why did yield drop after the last changeover?&rdquo;
@@ -798,24 +866,24 @@ export default function FactoryIntelligenceConstellation({
           className="recommendation-overlay constellation-element pointer-events-none"
           style={{ opacity: 0, transform: "translateY(10px) scale(0.9)", transition: "opacity 0.5s, transform 0.5s" }}
         >
-          <div className="bg-[#0c0c12]/92 border border-brand-green/35 p-3 rounded-xl shadow-2xl flex flex-col gap-1.5 w-full h-full justify-between">
-            <div className="flex justify-between items-center border-b border-brand-green/20 pb-1">
-              <span className="text-[8px] font-mono text-brand-green font-black uppercase tracking-wider flex items-center gap-1">
-                <Brain className="w-2.5 h-2.5 text-brand-green" /> Vish AI Recommendation
+          <div className="border p-3 rounded-xl shadow-2xl flex flex-col gap-1.5 w-full h-full justify-between" style={{ background: 'rgba(7, 11, 18, 0.92)', borderColor: hexToRgba(GOLD, 0.35) }}>
+            <div className="flex justify-between items-center pb-1" style={{ borderBottom: `1px solid ${hexToRgba(MINT, 0.2)}` }}>
+              <span className="text-[8px] font-mono font-black uppercase tracking-wider flex items-center gap-1" style={{ color: MINT }}>
+                <Brain className="w-2.5 h-2.5" style={{ color: MINT }} /> Vish AI Recommendation
               </span>
-              <span className="text-[6.5px] bg-brand-green/10 text-brand-green px-1 py-0.5 rounded border border-brand-green/25 font-mono font-bold">RCA ACTIVE</span>
+              <span className="text-[6.5px] px-1 py-0.5 rounded font-mono font-bold" style={{ background: hexToRgba(MINT, 0.1), color: MINT, border: `1px solid ${hexToRgba(MINT, 0.25)}` }}>RCA ACTIVE</span>
             </div>
             <p className="text-[9.5px] text-slate-200 leading-normal font-sans">
-              Changeover recorded a <span className="text-brand-green font-bold">4.2mm valve deviation</span> on Line 3. Adjust sealing pressure by <span className="text-brand-green font-bold">+12%</span> to regain yield.
+              Changeover recorded a <span style={{ color: MINT }} className="font-bold">4.2mm valve deviation</span> on Line 3. Adjust sealing pressure by <span style={{ color: GOLD }} className="font-bold">+12%</span> to regain yield.
             </p>
           </div>
         </foreignObject>
       </svg>
 
-      {/* Decorative background radial rings */}
+      {/* Decorative background radial rings — gold/platinum tint */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-        <div className="w-[450px] h-[450px] rounded-full border border-dashed border-brand-cyan/5 animate-[spin_120s_linear_infinite]" />
-        <div className="w-[360px] h-[360px] rounded-full border border-dotted border-brand-blue/5 animate-[spin_80s_linear_infinite_reverse]" />
+        <div className="w-[450px] h-[450px] rounded-full border border-dashed animate-[spin_120s_linear_infinite]" style={{ borderColor: hexToRgba(GOLD, 0.05) }} />
+        <div className="w-[360px] h-[360px] rounded-full border border-dotted animate-[spin_80s_linear_infinite_reverse]" style={{ borderColor: hexToRgba(PLATINUM, 0.04) }} />
       </div>
     </div>
   );

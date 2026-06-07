@@ -11,6 +11,16 @@
   --color-brand-green: #10b981;
   --color-brand-emerald: #059669;
   
+  /* Constellation Accent Palette */
+  --color-constellation-gold: #F6C96D;
+  --color-constellation-mint: #7CFFCB;
+  --color-constellation-amber: #FFB84D;
+  --color-constellation-coral: #FF6B6B;
+  --color-constellation-violet: #B69CFF;
+  --color-constellation-esg: #A3FF7A;
+  --color-constellation-platinum: #F8FAFC;
+  --color-constellation-muted: #A8B3C7;
+
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }

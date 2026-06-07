@@ -25,13 +25,13 @@ const iconMapMobile: Record<string, React.ComponentType<{ className?: string }>>
 export default function FactoryIntelligenceConstellationMobile({
   activeStage
 }: FactoryIntelligenceConstellationMobileProps) {
-  // Mobile departments spread on a 320x110 canvas
+  // Mobile departments spread on a 320x110 canvas with premium accent colors
   const mobileDepts = [
-    { id: "production", label: "Prod", x: 160, y: 16, color: "cyan" },
-    { id: "quality", label: "Qual", x: 235, y: 32, color: "indigo" },
-    { id: "maintenance", label: "Maint", x: 270, y: 80, color: "blue" },
-    { id: "safety", label: "Safe", x: 50, y: 80, color: "green" },
-    { id: "utility", label: "Util", x: 85, y: 32, color: "amber" }
+    { id: "production", label: "Prod", x: 160, y: 16, accentColor: "#F6C96D" },
+    { id: "quality", label: "Qual", x: 235, y: 32, accentColor: "#7CFFCB" },
+    { id: "maintenance", label: "Maint", x: 270, y: 80, accentColor: "#FFB84D" },
+    { id: "safety", label: "Safe", x: 50, y: 80, accentColor: "#FF6B6B" },
+    { id: "utility", label: "Util", x: 85, y: 32, accentColor: "#7CFFCB" }
   ];
 
   const centerNode = { x: 160, y: 65 };
@@ -71,10 +71,18 @@ export default function FactoryIntelligenceConstellationMobile({
             const isBroken = isChaos && status === "chaos";
             const isDim = status === "dim";
             
-            let strokeColor = "rgba(30, 107, 255, 0.3)";
-            if (isBroken) strokeColor = "#FF5A6B";
-            else if (isIntelligence && !isDim) strokeColor = "rgba(51, 230, 161, 0.6)";
-            else if (isOperatingLayer) strokeColor = "rgba(25, 212, 255, 0.5)";
+            let strokeColor = "rgba(248, 250, 252, 0.18)";
+            if (isDim) {
+              strokeColor = "rgba(248, 250, 252, 0.05)";
+            } else if (isBroken) {
+              strokeColor = "#FF6B6B";
+            } else if (isIntelligence) {
+              strokeColor = "rgba(124, 255, 203, 0.6)";
+            } else if (isOperatingLayer) {
+              strokeColor = dept.accentColor;
+            } else if (activeStage === 0) {
+              strokeColor = "rgba(248, 250, 252, 0.35)"; // brighter soft white in default mode
+            }
 
             return (
               <line
@@ -95,8 +103,8 @@ export default function FactoryIntelligenceConstellationMobile({
         {/* Slide 5 Stack signal ingress line */}
         {isStack && (
           <g>
-            <line x1="160" y1="110" x2="160" y2="65" stroke="rgba(25, 212, 255, 0.5)" strokeWidth="1" strokeDasharray="2 3" />
-            <circle cx="160" cy="90" r="1.5" fill="#19D4FF">
+            <line x1="160" y1="110" x2="160" y2="65" stroke="rgba(255, 184, 77, 0.45)" strokeWidth="1" strokeDasharray="2 3" />
+            <circle cx="160" cy="90" r="1.5" fill="#F6C96D">
               <animate attributeName="cy" from="110" to="65" dur="1.5s" repeatCount="indefinite" />
             </circle>
           </g>
@@ -108,10 +116,14 @@ export default function FactoryIntelligenceConstellationMobile({
           const isBroken = isChaos && status === "chaos";
           const isDim = status === "dim";
           
-          let borderColor = "rgba(81, 163, 255, 0.25)";
-          if (isBroken) borderColor = "#FF5A6B";
-          else if (isIntelligence && !isDim) borderColor = "rgba(51, 230, 161, 0.7)";
-          else if (isOperatingLayer) borderColor = "rgba(25, 212, 255, 0.6)";
+          let borderColor = "rgba(248, 250, 252, 0.25)";
+          if (isBroken) {
+            borderColor = "#FF6B6B";
+          } else if (isDim) {
+            borderColor = "rgba(248, 250, 252, 0.08)";
+          } else {
+            borderColor = dept.accentColor;
+          }
 
           return (
             <g key={`dept-mobile-${dept.id}`} className="transition-all duration-300">
@@ -120,7 +132,7 @@ export default function FactoryIntelligenceConstellationMobile({
                 cx={dept.x}
                 cy={dept.y}
                 r="13"
-                fill={isBroken ? "rgba(102, 30, 40, 0.9)" : "rgba(4, 21, 46, 0.85)"}
+                fill={isBroken ? "rgba(102, 30, 40, 0.9)" : "rgba(7, 11, 18, 0.86)"}
                 stroke={borderColor}
                 strokeWidth={isDim ? "0.5" : "1"}
                 opacity={isDim ? 0.25 : 1}
@@ -135,7 +147,7 @@ export default function FactoryIntelligenceConstellationMobile({
               <text
                 x={dept.x}
                 y={dept.y + 20}
-                fill={isBroken ? "#FF5A6B" : (isDim ? "#9FB4D3" : "#F4F8FF")}
+                fill={isBroken ? "#FF6B6B" : (isDim ? "#A8B3C7" : "#F8FAFC")}
                 fontSize="6"
                 fontFamily="monospace"
                 textAnchor="middle"
@@ -157,7 +169,7 @@ export default function FactoryIntelligenceConstellationMobile({
               cy={centerNode.y}
               r="22"
               fill="none"
-              stroke="rgba(51, 230, 161, 0.3)"
+              stroke="rgba(124, 255, 203, 0.3)"
               strokeWidth="1"
               className="animate-ping"
               style={{ animationDuration: "3s" }}
@@ -168,19 +180,19 @@ export default function FactoryIntelligenceConstellationMobile({
             cx={centerNode.x}
             cy={centerNode.y}
             r="17"
-            fill="rgba(4, 21, 46, 0.95)"
-            stroke={isChaos ? "rgba(25, 212, 255, 0.2)" : "rgba(25, 212, 255, 0.75)"}
+            fill="#070B12"
+            stroke={isChaos ? "rgba(30, 107, 255, 0.2)" : "rgba(30, 107, 255, 0.85)"}
             strokeWidth="1.5"
           />
           
-          <g transform={`translate(${centerNode.x - 6}, ${centerNode.y - 6})`} className="pointer-events-none text-brand-cyan">
-            <Cpu className="w-3.5 h-3.5 text-brand-cyan" />
+          <g transform={`translate(${centerNode.x - 6}, ${centerNode.y - 6})`} className="pointer-events-none">
+            <Cpu className="w-3.5 h-3.5 text-white animate-pulse" />
           </g>
 
           <text
             x={centerNode.x}
             y={centerNode.y + 24}
-            fill="#19D4FF"
+            fill="#F8FAFC"
             fontSize="5.5"
             fontFamily="monospace"
             fontWeight="black"
@@ -194,16 +206,16 @@ export default function FactoryIntelligenceConstellationMobile({
         {/* Slide 2 Chaos Alert Tag */}
         {isChaos && (
           <g transform="translate(10, 15)">
-            <rect width="50" height="12" rx="3" fill="rgba(102, 30, 40, 0.85)" stroke="#FF5A6B" strokeWidth="0.5" />
-            <text x="25" y="8" fill="#FF5A6B" fontSize="5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Excel log</text>
+            <rect width="50" height="12" rx="3" fill="rgba(7, 11, 18, 0.9)" stroke="#FF6B6B" strokeWidth="0.5" />
+            <text x="25" y="8" fill="#FF6B6B" fontSize="5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">Excel log</text>
           </g>
         )}
 
         {/* Slide 4 Intelligence suggestion tag */}
         {isIntelligence && (
           <g transform="translate(18, 75)">
-            <rect width="65" height="14" rx="3" fill="rgba(4, 21, 46, 0.9)" stroke="#33E6A1" strokeWidth="0.5" />
-            <text x="32.5" y="9.5" fill="#33E6A1" fontSize="5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">RCA: Valve Dev</text>
+            <rect width="65" height="14" rx="3" fill="rgba(7, 11, 18, 0.9)" stroke="#7CFFCB" strokeWidth="0.5" />
+            <text x="32.5" y="9.5" fill="#7CFFCB" fontSize="5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">RCA: Valve Dev</text>
           </g>
         )}
       </svg>

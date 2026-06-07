@@ -328,8 +328,8 @@ export default function ScrollNarrativeHero() {
           {/* Bottom Fade Overlay (dark gradient from bottom upward) */}
           <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#07070a] to-transparent z-2" />
           
-          {/* Right-side subtle radial glow behind visual graphics */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-br from-brand-cyan/5 via-brand-blue/5 to-transparent rounded-full blur-[130px] z-2" />
+          {/* Right-side dark isolation backdrop behind constellation */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[580px] h-[580px] rounded-full z-2" style={{ background: 'radial-gradient(circle, rgba(2, 6, 14, 0.82) 0%, rgba(2, 6, 14, 0.45) 45%, rgba(2, 6, 14, 0.15) 70%, transparent 100%)' }} />
         </div>
 
         {/* Subtle Ambient Glow */}
