@@ -12,6 +12,7 @@ import ProductScreenFrame from "@/components/ui/ProductScreenFrame";
 import { CheckCircle2, Brain, Layers, Link as LinkIcon, Database, ArrowUpRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import ChaosToStructureInteractive from "@/components/home/ChaosToStructureInteractive";
+import { Reveal, RevealStagger, RevealItem } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: homepageData.seo.title,
@@ -70,7 +71,7 @@ export default function HomePage() {
       <section className="py-20 md:py-28 bg-[#09090d] relative border-b border-brand-border/40">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-cyan/20 to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
+          <Reveal className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
             <Badge variant="cyan" className="mx-auto">Platform Capability</Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-shimmer">
               {data.whatIsDfOs.title}
@@ -78,19 +79,21 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm md:text-base">
               {data.whatIsDfOs.description}
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <RevealStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.whatIsDfOs.capabilities.map((cap, idx) => (
-              <Card key={idx} variant="cyan" className="flex flex-col gap-3">
+              <RevealItem key={idx} className="h-full">
+              <Card variant="cyan" className="flex flex-col gap-3 h-full">
                 <div className="w-10 h-10 rounded-lg bg-brand-cyan/5 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan font-mono font-bold text-sm">
                   0{idx + 1}
                 </div>
                 <h3 className="text-base font-bold text-white tracking-tight">{cap.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">{cap.description}</p>
+                <p className="text-sm text-slate-400 leading-relaxed">{cap.description}</p>
               </Card>
+              </RevealItem>
             ))}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
@@ -100,7 +103,7 @@ export default function HomePage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-indigo/5 rounded-full blur-[140px] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-20">
+          <Reveal className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-20">
             <Badge variant="indigo" className="mx-auto">AI Factory Stack</Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-shimmer">
               The AI-Ready Manufacturing Stack
@@ -108,7 +111,7 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm md:text-base">
               Three synchronized layers that connect your machines, digitize your processes, and prioritize your actions.
             </p>
-          </div>
+          </Reveal>
 
           {/* Interactive Stack Diagram Graphic */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -123,7 +126,7 @@ export default function HomePage() {
                   Vish AI
                 </h4>
                 <h3 className="text-base font-extrabold text-white mb-2">Manufacturing Intelligence Layer</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-sm text-slate-400 leading-relaxed">
                   The AI layer that turns factory memory into answers, priorities, explanations, and actions. 
                   Allows teams to query shifts, investigate deviations, and deploy digital SMEs.
                 </p>
@@ -135,7 +138,7 @@ export default function HomePage() {
               </div>
 
               {/* Connector */}
-              <div className="h-6 w-px bg-brand-border mx-auto" />
+              <div className="h-8 w-px bg-brand-border mx-auto signal-line" />
 
               {/* Product 2: Df-OS */}
               <div className="border border-brand-blue/30 bg-brand-card/55 rounded-xl p-5 shadow-lg relative overflow-hidden group hover:border-brand-blue transition-colors">
@@ -146,7 +149,7 @@ export default function HomePage() {
                   Df-OS
                 </h4>
                 <h3 className="text-base font-extrabold text-white mb-2">Digital Factory Operating System</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-sm text-slate-400 leading-relaxed">
                   The core platform database. Digitizes checklists, audits, handovers, safety logs, and PM routines. 
                   Structures execution variables into a clean record to power the factory memory.
                 </p>
@@ -158,7 +161,7 @@ export default function HomePage() {
               </div>
 
               {/* Connector */}
-              <div className="h-6 w-px bg-brand-border mx-auto" />
+              <div className="h-8 w-px bg-brand-border mx-auto signal-line" />
 
               {/* Product 1: X-Konnect */}
               <div className="border border-brand-cyan/30 bg-brand-card/55 rounded-xl p-5 shadow-lg relative overflow-hidden group hover:border-brand-cyan transition-colors">
@@ -169,7 +172,7 @@ export default function HomePage() {
                   X-Konnect
                 </h4>
                 <h3 className="text-base font-extrabold text-white mb-2">Industrial IoT Connectivity Layer</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-sm text-slate-400 leading-relaxed">
                   The machine connectivity middleware. Uses the Hectos Edge Gateway to capture parameters, PLC outputs, 
                   alarms, downtime signals, and energy meters directly from machines into Df-OS.
                 </p>
@@ -270,7 +273,7 @@ export default function HomePage() {
       {/* 6. Solutions by Function Section */}
       <section className="py-20 md:py-28 bg-brand-bg relative border-b border-brand-border/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
+          <Reveal className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
             <Badge variant="blue" className="mx-auto">Solutions by Function</Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-shimmer">
               One Operating System Across the Factory
@@ -278,30 +281,32 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm md:text-base">
               Df-OS replaces fragmented tools by connecting all departments under a unified process execution model.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <RevealStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {data.solutions.map((sol, idx) => (
-              <Card key={idx} variant="default" className="flex flex-col gap-3">
+              <RevealItem key={idx} className="h-full">
+              <Card variant="default" className="flex flex-col gap-3 h-full">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-white tracking-tight uppercase font-mono">
                     {sol.title}
                   </h3>
                   <span className="text-[10px] font-mono text-brand-cyan">0{idx + 1}</span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed flex-grow">
+                <p className="text-sm text-slate-400 leading-relaxed flex-grow">
                   {sol.description}
                 </p>
               </Card>
+              </RevealItem>
             ))}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
       {/* 7. Industries Served Section */}
       <section className="py-20 md:py-28 bg-[#09090d] relative border-b border-brand-border/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
+          <Reveal className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
             <Badge variant="cyan" className="mx-auto">Industries Served</Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-shimmer">
               Configured for Every Manufacturing Reality
@@ -309,9 +314,9 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm md:text-base">
               With over 400+ pre-built manufacturing workflows, Df-OS adapts to your unique processes.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <RevealStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.industries.map((ind) => {
               const industryImages: Record<string, string> = {
                 fmcg: "/images/stock/automated-production.jpg",
@@ -322,7 +327,8 @@ export default function HomePage() {
                 other: "/images/stock/petrochemical-sunset.jpg",
               };
               return (
-                <Card key={ind.id} variant="cyan" className="flex flex-col gap-3 relative overflow-hidden">
+                <RevealItem key={ind.id} className="h-full">
+                <Card variant="cyan" className="flex flex-col gap-3 relative overflow-hidden h-full">
                   {/* Industry Photo */}
                   <div className="relative h-36 -mx-6 -mt-6 mb-2 overflow-hidden">
                     <Image
@@ -335,16 +341,17 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111116] via-[#111116]/50 to-transparent" />
                   </div>
                   <h3 className="text-base font-bold text-white tracking-tight">{ind.name}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed flex-grow">{ind.description}</p>
+                  <p className="text-sm text-slate-400 leading-relaxed flex-grow">{ind.description}</p>
                   <div className="mt-2">
                     <Link href={`/industries#${ind.id}`} className="text-[10px] font-mono text-brand-cyan hover:underline inline-flex items-center gap-0.5">
                       Explore Workflows <ChevronRight className="w-3 h-3" />
                     </Link>
                   </div>
                 </Card>
+                </RevealItem>
               );
             })}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
@@ -374,7 +381,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex flex-col gap-1">
                       <h4 className="text-sm font-bold text-white">{feat.title}</h4>
-                      <p className="text-xs text-slate-400 leading-relaxed">{feat.description}</p>
+                      <p className="text-sm text-slate-400 leading-relaxed">{feat.description}</p>
                     </div>
                   </div>
                 ))}
@@ -448,7 +455,7 @@ export default function HomePage() {
       {/* 9. Proof & Outcomes Section */}
       <section className="py-20 md:py-28 bg-[#09090d] relative border-b border-brand-border/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
+          <Reveal className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
             <Badge variant="blue" className="mx-auto">Outcomes Enabled</Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-shimmer">
               Create Measurable Operational Impact
@@ -456,16 +463,16 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm md:text-base">
               Df-OS is not a generic dashboard. It is designed to run your factory like a digital system and drive operational improvements.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <RevealStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {data.outcomes.map((out, idx) => (
-              <div key={idx} className="flex gap-3 items-start border border-brand-border bg-brand-card/25 p-5 rounded-lg">
+              <RevealItem key={idx} className="flex gap-3 items-start border border-brand-border bg-brand-card/25 p-5 rounded-lg h-full">
                 <CheckCircle2 className="w-5 h-5 text-brand-cyan shrink-0 mt-0.5" />
-                <span className="text-xs md:text-sm text-slate-300 font-medium leading-relaxed">{out}</span>
-              </div>
+                <span className="text-sm text-slate-300 font-medium leading-relaxed">{out}</span>
+              </RevealItem>
             ))}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
@@ -492,7 +499,7 @@ export default function HomePage() {
                     </div>
                     <div className="flex flex-col gap-1">
                       <h4 className="text-sm font-bold text-white">{point.title}</h4>
-                      <p className="text-xs text-slate-400 leading-relaxed">{point.description}</p>
+                      <p className="text-sm text-slate-400 leading-relaxed">{point.description}</p>
                     </div>
                   </div>
                 ))}
@@ -528,7 +535,7 @@ export default function HomePage() {
       {/* 11. FAQ Accordion Section */}
       <section className="py-20 md:py-28 bg-[#09090d] relative border-b border-brand-border/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
+          <Reveal className="text-center flex flex-col gap-4 max-w-3xl mx-auto mb-16">
             <Badge variant="blue" className="mx-auto">FAQ</Badge>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-shimmer">
               Frequently Asked Questions
@@ -536,7 +543,7 @@ export default function HomePage() {
             <p className="text-slate-400 text-sm md:text-base">
               Common questions about the Digital Factory Operating System category and integration paths.
             </p>
-          </div>
+          </Reveal>
 
           <FAQAccordion items={data.faqs} />
         </div>
@@ -559,7 +566,7 @@ export default function HomePage() {
         {/* Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[140px] pointer-events-none" />
         
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative flex flex-col gap-6">
+        <Reveal className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative flex flex-col gap-6">
           <Badge variant="cyan" className="mx-auto">Make Your Factory AI-Ready</Badge>
           <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-shimmer">
             Ready to Make Your Factory AI-Ready?
@@ -579,7 +586,7 @@ export default function HomePage() {
               Explore the Platform
             </Button>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

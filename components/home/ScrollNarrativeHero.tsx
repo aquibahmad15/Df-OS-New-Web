@@ -16,8 +16,8 @@ import {
   ShieldCheck,
   Database
 } from "lucide-react";
-import FactoryIntelligenceConstellation from "@/components/hero/FactoryIntelligenceConstellation";
-import FactoryIntelligenceConstellationMobile from "@/components/hero/FactoryIntelligenceConstellationMobile";
+import ConnectedFactoryConstellation from "@/components/hero/ConnectedFactoryConstellation";
+import ConnectedFactoryConstellationMobile from "@/components/hero/ConnectedFactoryConstellationMobile";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -104,7 +104,7 @@ function DfOsMonogram({ className = "w-16 h-16" }: { className?: string }) {
 }
 
 // Eased React Count-Up Component for premium visual numbers rolling
-function CountUpNumber({ target, duration = 1600, suffix = "", active = true }: { target: number; duration?: number; suffix?: string; active?: boolean }) {
+function CountUpNumber({ target, duration = 1600, suffix = "", decimals = 0, active = true }: { target: number; duration?: number; suffix?: string; decimals?: number; active?: boolean }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (!active) {
@@ -118,7 +118,8 @@ function CountUpNumber({ target, duration = 1600, suffix = "", active = true }: 
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const easeProgress = progress * (2 - progress);
-      setCount(Math.floor(easeProgress * end));
+      const val = easeProgress * end;
+      setCount(decimals > 0 ? val : Math.floor(val));
       if (progress < 1) {
         animationFrameId = requestAnimationFrame(animate);
       } else {
@@ -127,8 +128,8 @@ function CountUpNumber({ target, duration = 1600, suffix = "", active = true }: 
     };
     animationFrameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [target, duration, active]);
-  return <span>{count.toLocaleString()}{suffix}</span>;
+  }, [target, duration, active, decimals]);
+  return <span>{count.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}{suffix}</span>;
 }
 
 const logoData: { [key: string]: { name: string; category: string; ext?: string } } = {
@@ -290,13 +291,13 @@ export default function ScrollNarrativeHero() {
           animation: orbit-counter-clockwise var(--duration, 60s) linear infinite;
         }
         .orbit-logo-card svg {
-          width: 86px !important;
-          height: 30px !important;
+          width: 118px !important;
+          height: 42px !important;
           transition: all 0.3s ease;
         }
         .animate-marquee-scroll svg {
-          width: 86px !important;
-          height: 30px !important;
+          width: 118px !important;
+          height: 42px !important;
         }
       `}} />
       
@@ -348,78 +349,62 @@ export default function ScrollNarrativeHero() {
                 return (
                   <div
                     key={stage.id}
-                    className={`hero-text-${index} absolute w-full flex flex-col gap-3.5 text-left items-start ${
+                    className={`hero-text-${index} absolute inset-0 flex flex-col justify-center gap-3.5 text-left items-start ${
                       index === 0 ? "pointer-events-auto z-10" : "opacity-0 invisible pointer-events-none z-0"
                     }`}
                   >
                     {index === 0 ? (
                       // Slide 1 Content
                       <>
-                        <div className="flex flex-col gap-1 items-start">
-                          <span className="text-[9.5px] font-mono font-bold tracking-widest uppercase text-brand-cyan border border-brand-cyan/25 px-2.5 py-1 rounded bg-brand-cyan/5">
-                            INTRODUCING A NEW CATEGORY IN MANUFACTURING
-                          </span>
-                          
-                          <div className="flex items-baseline gap-4 mt-2">
-                            <h1 className="text-5xl sm:text-6xl font-black tracking-tight leading-none text-shimmer">
-                              Df-OS
-                            </h1>
-                            <span className="text-[10px] font-mono font-bold tracking-wider uppercase px-2.5 py-1 rounded border border-brand-blue/30 text-brand-cyan bg-brand-blue/5">
-                              AI-Ready Manufacturing
-                            </span>
-                          </div>
-                          
-                          <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-200 leading-tight mt-1">
+                        <div className="flex flex-col gap-2.5 items-start">
+                          <h1 className="text-6xl sm:text-7xl font-black tracking-tight leading-none text-shimmer">
+                            Df-OS
+                          </h1>
+                          <h2 className="text-[26px] lg:text-[31px] font-black tracking-tight leading-[1.1] text-shimmer whitespace-nowrap">
                             Digital Factory Operating System
                           </h2>
                         </div>
-                        
-                        <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl">
+
+                        <p className="text-slate-300 text-sm sm:text-[15px] leading-relaxed max-w-xl">
                           Transform fragmented factory operations into connected operational intelligence through one unified digital operating layer built for modern manufacturing.
                         </p>
-
-                        {/* Brand Promise Highlight Badge */}
-                        <div className="flex items-center gap-2 px-3.5 py-1 rounded-full border border-brand-cyan/35 text-brand-cyan bg-brand-cyan/5 text-[9px] font-mono font-black uppercase tracking-widest shadow-[0_0_10px_rgba(6,182,212,0.15)] my-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-brand-green animate-pulse" />
-                          <span>Brand Promise: Disrupt Without Disruption</span>
-                        </div>
 
                         {/* Value Pillars 2x2 grid */}
                         <div className="grid grid-cols-2 gap-3 w-full max-w-xl my-2">
                           <div className="flex items-center gap-3 p-3 rounded-xl border border-brand-border/30 bg-[#111116]/30 shadow-md hover:border-brand-cyan/45 hover:bg-[#161620]/30 transition-all duration-300">
-                            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-cyan/10 text-brand-cyan shrink-0">
-                              <FileSpreadsheet className="w-4 h-4" />
+                            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-cyan/10 text-brand-cyan shrink-0">
+                              <FileSpreadsheet className="w-[18px] h-[18px]" />
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-xs font-bold text-white leading-none mb-1">Digitize Workflows</span>
-                              <span className="text-[9.5px] text-slate-400">Low-code shopfloor tools</span>
+                              <span className="text-[13px] font-bold text-white leading-none mb-1">Digitize Workflows</span>
+                              <span className="text-[10.5px] text-slate-400">Low-code shopfloor tools</span>
                             </div>
                           </div>
                           <div className="flex items-center gap-3 p-3 rounded-xl border border-brand-border/30 bg-[#111116]/30 shadow-md hover:border-brand-blue/45 hover:bg-[#161620]/30 transition-all duration-300">
-                            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-blue/10 text-brand-blue shrink-0">
-                              <Cpu className="w-4 h-4" />
+                            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-blue/10 text-brand-blue shrink-0">
+                              <Cpu className="w-[18px] h-[18px]" />
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-xs font-bold text-white leading-none mb-1">Connect Operations</span>
-                              <span className="text-[9.5px] text-slate-400">Live IoT & HMI connectivity</span>
+                              <span className="text-[13px] font-bold text-white leading-none mb-1">Connect Operations</span>
+                              <span className="text-[10.5px] text-slate-400">Live IoT & HMI connectivity</span>
                             </div>
                           </div>
                           <div className="flex items-center gap-3 p-3 rounded-xl border border-brand-border/30 bg-[#111116]/30 shadow-md hover:border-brand-green/45 hover:bg-[#161620]/30 transition-all duration-300">
-                            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-green/10 text-brand-green shrink-0">
-                              <Database className="w-4 h-4" />
+                            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-green/10 text-brand-green shrink-0">
+                              <Database className="w-[18px] h-[18px]" />
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-xs font-bold text-white leading-none mb-1">Create Factory Memory</span>
-                              <span className="text-[9.5px] text-slate-400">Unified historical database</span>
+                              <span className="text-[13px] font-bold text-white leading-none mb-1">Create Factory Memory</span>
+                              <span className="text-[10.5px] text-slate-400">Unified historical database</span>
                             </div>
                           </div>
                           <div className="flex items-center gap-3 p-3 rounded-xl border border-brand-border/30 bg-[#111116]/30 shadow-md hover:border-brand-cyan/45 hover:bg-[#161620]/30 transition-all duration-300">
-                            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-cyan/10 text-brand-cyan shrink-0">
-                              <Brain className="w-4 h-4" />
+                            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-brand-cyan/10 text-brand-cyan shrink-0">
+                              <Brain className="w-[18px] h-[18px]" />
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-xs font-bold text-white leading-none mb-1">Power AI Decisions</span>
-                              <span className="text-[9.5px] text-slate-400">Vish AI agent integration</span>
+                              <span className="text-[13px] font-bold text-white leading-none mb-1">Power AI Decisions</span>
+                              <span className="text-[10.5px] text-slate-400">Vish AI agent integration</span>
                             </div>
                           </div>
                         </div>
@@ -472,9 +457,9 @@ export default function ScrollNarrativeHero() {
               })}
             </div>
 
-            {/* RIGHT SIDE Visual Column (col-span-5 col-start-8 relative h-[480px] flex items-center justify-center) */}
-            <div className="col-span-5 col-start-8 relative h-[480px] flex items-center justify-center">
-              <FactoryIntelligenceConstellation activeStage={activeStage} />
+            {/* RIGHT SIDE Visual Column — enlarged to command ~48% of hero width */}
+            <div className="col-span-6 col-start-7 relative h-[580px] flex items-center justify-center">
+              <ConnectedFactoryConstellation activeStage={activeStage} />
             </div>
 
           </div>
@@ -491,18 +476,18 @@ export default function ScrollNarrativeHero() {
               </span>
               
               {/* Premium Metrics Cards */}
-              <div className="grid grid-cols-4 gap-4 w-full">
+              <div className="grid grid-cols-4 gap-3 w-full">
                 {[
-                  { target: 400, label: "Customers Served", suffix: "+" },
-                  { target: 1400, label: "Machines Connected", suffix: "+" },
-                  { target: 1000, label: "Factories Digitized", suffix: "+" },
-                  { target: 9000, label: "Active Users", suffix: "+" }
+                  { target: 650, decimals: 0, label: "Factories Deployed", suffix: "+" },
+                  { target: 20000, decimals: 0, label: "Daily Active Users", suffix: "+" },
+                  { target: 1.12, decimals: 2, label: "Submissions FY25–26", suffix: "M" },
+                  { target: 70, decimals: 0, label: "Gross Margin", suffix: "%" }
                 ].map((metric, idx) => (
-                  <div key={idx} className="flex flex-col items-center justify-center p-3 rounded-xl border border-brand-border/25 bg-[#0c0c12]/45 hover:bg-[#111116]/80 hover:border-brand-cyan/30 shadow-[0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-300">
-                    <span className="text-xl md:text-2xl font-black text-white tracking-tight leading-none mb-1">
-                      <CountUpNumber target={metric.target} suffix={metric.suffix} active={activeStage === 0} />
+                  <div key={idx} className="flex flex-col items-center justify-center px-3 py-2 rounded-lg border border-brand-border/25 bg-[#0c0c12]/45 hover:bg-[#111116]/80 hover:border-brand-cyan/30 shadow-[0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-300">
+                    <span className="text-xl md:text-2xl font-black gradient-text-blue-cyan tracking-tight leading-none mb-1">
+                      <CountUpNumber target={metric.target} suffix={metric.suffix} decimals={metric.decimals} active={activeStage === 0} />
                     </span>
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400 font-semibold text-center">
+                    <span className="text-[8.5px] font-mono uppercase tracking-wider text-slate-400 font-semibold text-center">
                       {metric.label}
                     </span>
                   </div>
@@ -511,17 +496,17 @@ export default function ScrollNarrativeHero() {
 
               {/* Scrolling Client Logo Marquee inside a glass panel */}
               <div className="w-full bg-[#0c0c12]/30 border border-brand-border/30 backdrop-blur-md rounded-xl p-3 mt-1 overflow-hidden flex select-none">
-                <div className="animate-marquee-scroll flex gap-12 items-center">
+                <div className="animate-marquee-scroll flex gap-6 items-center">
                   {["unilever", "badshah", "marico", "dabur", "itc", "pepsico", "danone", "hygienic", "mondelez", "wholetruth", "hero", "suzuki", "bajaj", "ceat", "lumax"].map((id, index) => {
                     const brand = logoData[id];
                     if (!brand) return null;
                     return (
-                      <div key={`logo-strip-${id}-${index}`} className="flex items-center justify-center w-[85px] h-[26px] opacity-45 hover:opacity-85 transition-opacity duration-300 pointer-events-none shrink-0">
+                      <div key={`logo-strip-${id}-${index}`} className="flex items-center justify-center w-[124px] h-[46px] opacity-50 hover:opacity-90 transition-opacity duration-300 pointer-events-none shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img 
-                          src={`/images/clients/${id}.${brand.ext || 'png'}`} 
-                          className="max-w-full max-h-full object-contain filter brightness-125 contrast-75 grayscale" 
-                          alt={brand.name} 
+                        <img
+                          src={`/images/clients/${id}.${brand.ext || 'png'}`}
+                          className="max-w-full max-h-full object-contain filter brightness-125 contrast-75 grayscale"
+                          alt={brand.name}
                         />
                       </div>
                     );
@@ -531,12 +516,12 @@ export default function ScrollNarrativeHero() {
                     const brand = logoData[id];
                     if (!brand) return null;
                     return (
-                      <div key={`logo-strip-dup-${id}-${index}`} className="flex items-center justify-center w-[85px] h-[26px] opacity-45 hover:opacity-85 transition-opacity duration-300 pointer-events-none shrink-0">
+                      <div key={`logo-strip-dup-${id}-${index}`} className="flex items-center justify-center w-[124px] h-[46px] opacity-50 hover:opacity-90 transition-opacity duration-300 pointer-events-none shrink-0">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img 
-                          src={`/images/clients/${id}.${brand.ext || 'png'}`} 
-                          className="max-w-full max-h-full object-contain filter brightness-125 contrast-75 grayscale" 
-                          alt={brand.name} 
+                        <img
+                          src={`/images/clients/${id}.${brand.ext || 'png'}`}
+                          className="max-w-full max-h-full object-contain filter brightness-125 contrast-75 grayscale"
+                          alt={brand.name}
                         />
                       </div>
                     );
@@ -654,7 +639,7 @@ export default function ScrollNarrativeHero() {
 
           {/* Mobile Simplified Graphics Preview */}
           <div className="w-full h-28 bg-[#111116]/40 border border-brand-border/30 rounded-xl relative overflow-hidden flex items-center justify-center">
-            <FactoryIntelligenceConstellationMobile activeStage={mobileStage} />
+            <ConnectedFactoryConstellationMobile activeStage={mobileStage} />
           </div>
 
           {/* Stacked Mobile CTAs */}
@@ -693,14 +678,14 @@ export default function ScrollNarrativeHero() {
           {/* Metrics 2x2 Grid */}
           <div className="grid grid-cols-2 gap-2 w-full">
             {[
-              { target: 400, label: "Customers Served", suffix: "+" },
-              { target: 1400, label: "Machines Connected", suffix: "+" },
-              { target: 1000, label: "Factories Digitized", suffix: "+" },
-              { target: 9000, label: "Active Users", suffix: "+" }
+              { display: "650+", label: "Factories Deployed" },
+              { display: "20,000+", label: "Daily Active Users" },
+              { display: "1.12M", label: "Submissions FY25–26" },
+              { display: "70%", label: "Gross Margin" }
             ].map((metric, idx) => (
               <div key={idx} className="flex flex-col items-center justify-center p-2 rounded-lg border border-brand-border/25 bg-[#0c0c12]/50">
-                <span className="text-sm font-black text-white leading-none mb-0.5">
-                  {metric.target}{metric.suffix}
+                <span className="text-base font-black gradient-text-blue-cyan leading-none mb-0.5">
+                  {metric.display}
                 </span>
                 <span className="text-[8px] font-mono uppercase tracking-wider text-slate-400 font-semibold text-center">
                   {metric.label}

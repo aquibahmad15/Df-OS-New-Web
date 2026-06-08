@@ -42,16 +42,18 @@ export const departments: DepartmentConfig[] = [
     color: "cyan",
     accentColor: "#F6C96D",
     modules: [
-      { id: "prod-logbook", label: "Production Logbook", priority: "primary", x: 170, y: 25 },
-      { id: "prod-planning", label: "Production Planning", priority: "primary", x: 250, y: 10 },
-      { id: "oee-monitoring", label: "OEE Monitoring", priority: "primary", x: 330, y: 25 },
-      { id: "perf-dashboard", label: "Performance Dashboard", priority: "primary", x: 320, y: 55 },
-      { id: "batch-tracking", label: "Batch Tracking", priority: "secondary", x: 145, y: 55 },
-      { id: "shift-handover", label: "Shift Handover", priority: "secondary", x: 175, y: 85 },
-      { id: "wip-tracking", label: "WIP Tracking", priority: "secondary", x: 200, y: 105 },
-      { id: "downtime-analysis", label: "Downtime Analysis", priority: "secondary", x: 300, y: 105 },
-      { id: "changeover-log", label: "Changeover Log", priority: "secondary", x: 350, y: 85 },
-      { id: "fg-dispatch", label: "FG Dispatch", priority: "secondary", x: 355, y: 55 }
+      // Primary — arc from NW to NE above hub
+      { id: "prod-logbook",      label: "Production Logbook",   priority: "primary",   x: 168, y: 24 },
+      { id: "prod-planning",     label: "Planning & Scheduling", priority: "primary",   x: 250, y: 14 },
+      { id: "oee-monitoring",    label: "OEE Monitoring",        priority: "primary",   x: 332, y: 24 },
+      { id: "perf-dashboard",    label: "Performance Monitor",   priority: "primary",   x: 322, y: 54 },
+      // Secondary
+      { id: "batch-tracking",    label: "Batch Tracking",        priority: "secondary", x: 148, y: 50 },
+      { id: "shift-handover",    label: "Shift Handover",        priority: "secondary", x: 172, y: 82 },
+      { id: "wip-tracking",      label: "WIP Tracking",          priority: "secondary", x: 202, y: 100 },
+      { id: "downtime-analysis", label: "Downtime Analysis",     priority: "secondary", x: 298, y: 100 },
+      { id: "changeover-log",    label: "Changeover Log",        priority: "secondary", x: 348, y: 82 },
+      { id: "fg-dispatch",       label: "FG Dispatch",           priority: "secondary", x: 352, y: 52 },
     ]
   },
   {
@@ -63,17 +65,19 @@ export const departments: DepartmentConfig[] = [
     color: "indigo",
     accentColor: "#7CFFCB",
     modules: [
-      { id: "in-process-insp", label: "In-Process Inspection", priority: "primary", x: 450, y: 60 },
-      { id: "spc-analysis", label: "SPC Analysis", priority: "primary", x: 470, y: 95 },
-      { id: "non-conformance", label: "Non-Conformance", priority: "primary", x: 475, y: 130 },
-      { id: "qav-audit", label: "QAV Audit", priority: "primary", x: 455, y: 160 },
-      { id: "pdi-check", label: "PDI Check", priority: "secondary", x: 430, y: 55 },
-      { id: "gamba-walk", label: "GAMBA Walk", priority: "secondary", x: 480, y: 75 },
-      { id: "5s-audit", label: "5S Audit", priority: "secondary", x: 490, y: 110 },
-      { id: "poka-yoke", label: "Poka Yoke", priority: "secondary", x: 485, y: 145 },
-      { id: "supplier-audit", label: "Supplier Audit", priority: "secondary", x: 460, y: 175 },
-      { id: "calibration", label: "Calibration", priority: "secondary", x: 420, y: 175 },
-      { id: "incoming-insp", label: "Incoming Inspection", priority: "secondary", x: 430, y: 185 }
+      // Primary — fan upper-right
+      { id: "in-process-insp", label: "In-Process Inspection", priority: "primary",   x: 450, y: 60 },
+      { id: "spc-analysis",    label: "SPC Analysis",          priority: "primary",   x: 468, y: 94 },
+      { id: "non-conformance", label: "Non-Conformance",       priority: "primary",   x: 472, y: 128 },
+      { id: "qav-audit",       label: "QAV Audit",             priority: "primary",   x: 452, y: 160 },
+      // Secondary
+      { id: "pdi-check",       label: "PDI Check",             priority: "secondary", x: 428, y: 55 },
+      { id: "gamba-walk",      label: "GAMBA Walk",            priority: "secondary", x: 476, y: 74 },
+      { id: "5s-audit",        label: "5S Audit",              priority: "secondary", x: 486, y: 110 },
+      { id: "poka-yoke",       label: "Poka Yoke",             priority: "secondary", x: 480, y: 144 },
+      { id: "supplier-audit",  label: "Supplier Audit",        priority: "secondary", x: 456, y: 174 },
+      { id: "calibration",     label: "Calibration",           priority: "secondary", x: 418, y: 174 },
+      { id: "incoming-insp",   label: "Incoming Insp.",        priority: "secondary", x: 428, y: 188 },
     ]
   },
   {
@@ -85,15 +89,17 @@ export const departments: DepartmentConfig[] = [
     color: "blue",
     accentColor: "#FFB84D",
     modules: [
-      { id: "preventive-maint", label: "Preventive Maintenance", priority: "primary", x: 490, y: 195 },
-      { id: "breakdown-rep", label: "Breakdown Reporting", priority: "primary", x: 500, y: 230 },
-      { id: "cond-monitoring", label: "Condition Monitoring", priority: "primary", x: 495, y: 265 },
-      { id: "work-order", label: "Work Order", priority: "primary", x: 480, y: 295 },
-      { id: "spares-mgmt", label: "Spares Management", priority: "secondary", x: 475, y: 195 },
-      { id: "jh-tags", label: "JH Tags", priority: "secondary", x: 510, y: 215 },
-      { id: "asset-perf", label: "Asset Performance", priority: "secondary", x: 510, y: 250 },
-      { id: "lubrication", label: "Lubrication", priority: "secondary", x: 505, y: 280 },
-      { id: "sla-tracking", label: "SLA Tracking", priority: "secondary", x: 460, y: 310 }
+      // Primary — fan right
+      { id: "preventive-maint", label: "Preventive Maint.",    priority: "primary",   x: 488, y: 194 },
+      { id: "breakdown-rep",    label: "Breakdown Reporting",  priority: "primary",   x: 492, y: 228 },
+      { id: "cond-monitoring",  label: "Condition Monitoring", priority: "primary",   x: 490, y: 262 },
+      { id: "work-order",       label: "Work Order Mgmt",      priority: "primary",   x: 476, y: 294 },
+      // Secondary — fixed from x=510 to x≤490
+      { id: "spares-mgmt",      label: "Spares Mgmt",          priority: "secondary", x: 472, y: 194 },
+      { id: "jh-tags",          label: "JH Tags",              priority: "secondary", x: 484, y: 212 },
+      { id: "asset-perf",       label: "Asset Performance",    priority: "secondary", x: 486, y: 248 },
+      { id: "lubrication",      label: "Lubrication",          priority: "secondary", x: 482, y: 278 },
+      { id: "sla-tracking",     label: "SLA Tracking",         priority: "secondary", x: 456, y: 308 },
     ]
   },
   {
@@ -105,17 +111,19 @@ export const departments: DepartmentConfig[] = [
     color: "green",
     accentColor: "#FF6B6B",
     modules: [
-      { id: "hazard-reporting", label: "Hazard Reporting", priority: "primary", x: 440, y: 345 },
-      { id: "incident-inv", label: "Incident Investigation", priority: "primary", x: 445, y: 380 },
-      { id: "work-permit", label: "Work Permit", priority: "primary", x: 430, y: 410 },
-      { id: "loto-mgmt", label: "LOTO Management", priority: "primary", x: 400, y: 430 },
-      { id: "visitor-mgmt", label: "Visitor Management", priority: "secondary", x: 420, y: 340 },
-      { id: "hira-assessment", label: "HIRA Assessment", priority: "secondary", x: 455, y: 360 },
-      { id: "ppe-compliance", label: "PPE Compliance", priority: "secondary", x: 460, y: 395 },
-      { id: "safety-drill", label: "Safety Drill", priority: "secondary", x: 450, y: 425 },
-      { id: "emergency-plan", label: "Emergency Plan", priority: "secondary", x: 420, y: 445 },
-      { id: "fire-safety", label: "Fire Safety", priority: "secondary", x: 380, y: 450 },
-      { id: "workplace-ergo", label: "Workplace Ergonomics", priority: "secondary", x: 345, y: 435 }
+      // Primary — fan lower-right
+      { id: "hazard-reporting", label: "Hazard Reporting",       priority: "primary",   x: 438, y: 344 },
+      { id: "incident-inv",     label: "Incident Investigation", priority: "primary",   x: 442, y: 378 },
+      { id: "work-permit",      label: "Work Permit",            priority: "primary",   x: 428, y: 408 },
+      { id: "loto-mgmt",        label: "LOTO Management",        priority: "primary",   x: 398, y: 428 },
+      // Secondary
+      { id: "visitor-mgmt",     label: "Visitor Management",     priority: "secondary", x: 418, y: 338 },
+      { id: "hira-assessment",  label: "HIRA Assessment",        priority: "secondary", x: 452, y: 358 },
+      { id: "ppe-compliance",   label: "PPE Compliance",         priority: "secondary", x: 456, y: 392 },
+      { id: "safety-drill",     label: "Safety Drill",           priority: "secondary", x: 446, y: 422 },
+      { id: "emergency-plan",   label: "Emergency Plan",         priority: "secondary", x: 416, y: 444 },
+      { id: "fire-safety",      label: "Fire Safety",            priority: "secondary", x: 376, y: 448 },
+      { id: "workplace-ergo",   label: "Workplace Ergonomics",   priority: "secondary", x: 342, y: 432 },
     ]
   },
   {
@@ -127,11 +135,13 @@ export const departments: DepartmentConfig[] = [
     color: "teal",
     accentColor: "#A3FF7A",
     modules: [
-      { id: "esg-monitoring", label: "ESG Monitoring", priority: "primary", x: 250, y: 465 },
-      { id: "energy-report", label: "Energy Report", priority: "secondary", x: 200, y: 455 },
-      { id: "water-report", label: "Water Report", priority: "secondary", x: 220, y: 475 },
-      { id: "sustainability", label: "Sustainability", priority: "secondary", x: 280, y: 475 },
-      { id: "compliance-log", label: "Compliance Log", priority: "secondary", x: 300, y: 455 }
+      // Primary — pulled inward from edge (was y=465)
+      { id: "esg-monitoring", label: "ESG Monitoring", priority: "primary",   x: 250, y: 458 },
+      // Secondary — pulled in from y=475
+      { id: "energy-report",  label: "Energy Report",  priority: "secondary", x: 198, y: 450 },
+      { id: "water-report",   label: "Water Report",   priority: "secondary", x: 218, y: 466 },
+      { id: "sustainability", label: "Sustainability",  priority: "secondary", x: 282, y: 466 },
+      { id: "compliance-log", label: "Compliance Log", priority: "secondary", x: 302, y: 450 },
     ]
   },
   {
@@ -143,15 +153,17 @@ export const departments: DepartmentConfig[] = [
     color: "amber",
     accentColor: "#7CFFCB",
     modules: [
-      { id: "energy-tracking", label: "Energy Tracking", priority: "primary", x: 60, y: 345 },
-      { id: "water-logbook", label: "Water Logbook", priority: "primary", x: 55, y: 380 },
-      { id: "elec-logbook", label: "Electricity Logbook", priority: "primary", x: 70, y: 410 },
-      { id: "chiller-log", label: "Chiller Log", priority: "primary", x: 100, y: 430 },
-      { id: "etp-monitor", label: "ETP Monitor", priority: "secondary", x: 80, y: 340 },
-      { id: "boiler-log", label: "Boiler Log", priority: "secondary", x: 40, y: 360 },
-      { id: "fuel-tracking", label: "Fuel Tracking", priority: "secondary", x: 35, y: 395 },
-      { id: "steam-log", label: "Steam Log", priority: "secondary", x: 50, y: 425 },
-      { id: "solar-monitor", label: "Solar Monitor", priority: "secondary", x: 80, y: 445 }
+      // Primary — fan lower-left
+      { id: "energy-tracking", label: "Energy Tracking",     priority: "primary",   x: 60,  y: 342 },
+      { id: "water-logbook",   label: "Water Logbook",       priority: "primary",   x: 55,  y: 378 },
+      { id: "elec-logbook",    label: "Electricity Logbook", priority: "primary",   x: 68,  y: 408 },
+      { id: "chiller-log",     label: "Chiller Log",         priority: "primary",   x: 98,  y: 428 },
+      // Secondary
+      { id: "etp-monitor",     label: "ETP Monitor",         priority: "secondary", x: 78,  y: 338 },
+      { id: "boiler-log",      label: "Boiler Log",          priority: "secondary", x: 42,  y: 360 },
+      { id: "fuel-tracking",   label: "Fuel Tracking",       priority: "secondary", x: 36,  y: 393 },
+      { id: "steam-log",       label: "Steam Log",           priority: "secondary", x: 50,  y: 422 },
+      { id: "solar-monitor",   label: "Solar Monitor",       priority: "secondary", x: 78,  y: 442 },
     ]
   },
   {
@@ -163,26 +175,28 @@ export const departments: DepartmentConfig[] = [
     color: "emerald",
     accentColor: "#B69CFF",
     modules: [
-      { id: "supplier-perf", label: "Supplier Performance", priority: "primary", x: 10, y: 195 },
-      { id: "warehouse-auditing", label: "Warehouse Auditing", priority: "primary", x: 0, y: 230 },
-      { id: "truck-tracking", label: "Truck Tracking", priority: "primary", x: 5, y: 265 },
-      { id: "goods-rec-insp", label: "Goods Received Inspection", priority: "primary", x: 20, y: 295 },
-      { id: "inventory-mgmt", label: "Inventory Management", priority: "secondary", x: -10, y: 210 },
-      { id: "material-indent", label: "Material Indent", priority: "secondary", x: -10, y: 250 },
-      { id: "dispatch-log", label: "Dispatch Log", priority: "secondary", x: 5, y: 280 },
-      { id: "grn-tracking", label: "GRN Tracking", priority: "secondary", x: 35, y: 310 }
+      // Primary — fixed from x=-10/x=0; labels shortened to fit near left edge
+      { id: "supplier-perf",      label: "Supplier Perf",   priority: "primary",   x: 52, y: 182 },
+      { id: "warehouse-auditing", label: "WH Auditing",     priority: "primary",   x: 40, y: 222 },
+      { id: "truck-tracking",     label: "Truck Tracking",  priority: "primary",   x: 42, y: 260 },
+      { id: "goods-rec-insp",     label: "GRN Inspection",  priority: "primary",   x: 50, y: 298 },
+      // Secondary — fixed from x=-10
+      { id: "inventory-mgmt",     label: "Inventory Mgmt",  priority: "secondary", x: 38, y: 200 },
+      { id: "material-indent",    label: "Material Indent", priority: "secondary", x: 36, y: 242 },
+      { id: "dispatch-log",       label: "Dispatch Log",    priority: "secondary", x: 42, y: 278 },
+      { id: "grn-tracking",       label: "GRN Tracking",   priority: "secondary", x: 58, y: 314 },
     ]
   }
 ];
 
 export const crossLinks: CrossLinkConfig[] = [
-  { id: "link-prod-qual", from: "production", to: "quality", reason: "Inspection deviations" },
-  { id: "link-prod-maint", from: "production", to: "maintenance", reason: "OEE breakdowns" },
-  { id: "link-prod-util", from: "production", to: "utility", reason: "Energy correlation" },
-  { id: "link-qual-sc", from: "quality", to: "supply-chain", reason: "Incoming inspections" },
-  { id: "link-maint-util", from: "maintenance", to: "utility", reason: "Utility maintenance" },
-  { id: "link-safe-maint", from: "safety", to: "maintenance", reason: "Work permits & LOTO" },
-  { id: "link-util-esg", from: "utility", to: "esg", reason: "ESG sustainability" }
+  { id: "link-prod-qual",  from: "production",  to: "quality",      reason: "Inspection deviations" },
+  { id: "link-prod-maint", from: "production",  to: "maintenance",  reason: "OEE breakdowns" },
+  { id: "link-prod-util",  from: "production",  to: "utility",      reason: "Energy correlation" },
+  { id: "link-qual-sc",    from: "quality",     to: "supply-chain", reason: "Incoming inspections" },
+  { id: "link-maint-util", from: "maintenance", to: "utility",      reason: "Utility maintenance" },
+  { id: "link-safe-maint", from: "safety",      to: "maintenance",  reason: "Work permits & LOTO" },
+  { id: "link-util-esg",   from: "utility",     to: "esg",          reason: "ESG sustainability" },
 ];
 
 export interface SlideState {
@@ -194,23 +208,42 @@ export interface SlideState {
   showMachineIngress?: boolean;
   showAiHalo?: boolean;
   showExternalFragments?: boolean;
+  /** Show cross-links as a very faint skeleton (brand/Slide 1 only) */
+  showSubtleCrossLinks?: boolean;
 }
 
 export const slideStates: Record<number, SlideState> = {
+  // Slide 1 — Brand / Category: full system connected, depth visible
   0: {
     mode: "brand",
     activeDepartments: ["production", "quality", "maintenance", "safety", "utility", "supply-chain", "esg"],
     activeModules: [
+      // Production: 4 primary + 2 secondary
       "prod-logbook", "prod-planning", "oee-monitoring", "perf-dashboard",
-      "in-process-insp", "spc-analysis",
-      "preventive-maint", "breakdown-rep",
-      "hazard-reporting", "work-permit",
-      "energy-tracking", "water-logbook",
-      "supplier-perf", "warehouse-auditing",
-      "esg-monitoring"
+      "batch-tracking", "shift-handover",
+      // Quality: 3 primary + 2 secondary
+      "in-process-insp", "spc-analysis", "qav-audit",
+      "pdi-check", "5s-audit",
+      // Maintenance: 3 primary + 2 secondary
+      "preventive-maint", "breakdown-rep", "cond-monitoring",
+      "spares-mgmt", "jh-tags",
+      // Safety: 3 primary + 2 secondary
+      "hazard-reporting", "work-permit", "loto-mgmt",
+      "visitor-mgmt", "hira-assessment",
+      // Utility: 3 primary + 2 secondary
+      "energy-tracking", "water-logbook", "elec-logbook",
+      "etp-monitor", "boiler-log",
+      // Supply Chain: 3 primary + 2 secondary
+      "supplier-perf", "warehouse-auditing", "goods-rec-insp",
+      "inventory-mgmt", "dispatch-log",
+      // ESG: primary + 2 secondary
+      "esg-monitoring", "energy-report", "sustainability",
     ],
-    highlightedLinks: []
+    highlightedLinks: [],
+    showSubtleCrossLinks: true,
   },
+
+  // Slide 2 — Chaos / Fragmented
   1: {
     mode: "chaos",
     activeDepartments: ["production", "quality", "maintenance", "safety", "utility"],
@@ -219,12 +252,14 @@ export const slideStates: Record<number, SlideState> = {
       "non-conformance", "poka-yoke",
       "breakdown-rep", "jh-tags",
       "incident-inv", "ppe-compliance",
-      "energy-tracking", "fuel-tracking"
+      "energy-tracking", "fuel-tracking",
     ],
     highlightedLinks: [],
     showBrokenLinks: true,
-    showExternalFragments: true
+    showExternalFragments: true,
   },
+
+  // Slide 3 — Df-OS Operating Layer
   2: {
     mode: "operating-layer",
     activeDepartments: ["production", "quality", "maintenance", "safety", "utility", "supply-chain"],
@@ -234,21 +269,25 @@ export const slideStates: Record<number, SlideState> = {
       "preventive-maint", "breakdown-rep", "cond-monitoring",
       "hazard-reporting", "work-permit", "loto-mgmt",
       "energy-tracking", "water-logbook", "elec-logbook",
-      "supplier-perf", "warehouse-auditing", "goods-rec-insp"
+      "supplier-perf", "warehouse-auditing", "goods-rec-insp",
     ],
-    highlightedLinks: ["link-prod-qual", "link-prod-maint", "link-qual-sc", "link-maint-util"]
+    highlightedLinks: ["link-prod-qual", "link-prod-maint", "link-qual-sc", "link-maint-util"],
   },
+
+  // Slide 4 — Vish AI Intelligence
   3: {
     mode: "intelligence",
     activeDepartments: ["production", "maintenance", "quality"],
     activeModules: [
       "oee-monitoring", "downtime-analysis", "perf-dashboard", "changeover-log",
       "breakdown-rep", "cond-monitoring", "work-order",
-      "in-process-insp", "non-conformance", "spc-analysis", "qav-audit"
+      "in-process-insp", "non-conformance", "spc-analysis", "qav-audit",
     ],
     highlightedLinks: ["link-prod-maint", "link-prod-qual"],
-    showAiHalo: true
+    showAiHalo: true,
   },
+
+  // Slide 5 — AI Factory Stack
   4: {
     mode: "stack",
     activeDepartments: ["production", "quality", "maintenance", "safety", "utility", "supply-chain", "esg"],
@@ -259,10 +298,10 @@ export const slideStates: Record<number, SlideState> = {
       "work-permit", "loto-mgmt",
       "energy-tracking", "chiller-log",
       "supplier-perf", "truck-tracking",
-      "esg-monitoring"
+      "esg-monitoring",
     ],
     highlightedLinks: ["link-prod-maint", "link-safe-maint", "link-util-esg"],
     showMachineIngress: true,
-    showAiHalo: true
-  }
+    showAiHalo: true,
+  },
 };

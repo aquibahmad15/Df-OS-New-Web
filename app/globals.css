@@ -109,6 +109,29 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Signal-flow connector — a pulse travelling down a thin line */
+.signal-line {
+  position: relative;
+  overflow: hidden;
+}
+.signal-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -60%;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(to bottom, transparent, var(--color-brand-cyan), transparent);
+  animation: signal-down 2.2s linear infinite;
+}
+@keyframes signal-down {
+  0% { top: -60%; }
+  100% { top: 110%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .signal-line::after { animation: none; }
+}
+
 /* Signal animation dot */
 .signal-dot {
   position: relative;

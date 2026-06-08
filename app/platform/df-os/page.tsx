@@ -7,6 +7,7 @@ import Button from "@/components/ui/Button";
 import AnswerBlock from "@/components/seo/AnswerBlock";
 import ProductScreenFrame from "@/components/ui/ProductScreenFrame";
 import { CheckCircle2, ArrowRight, Library } from "lucide-react";
+import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: dfOsProductData.seo.title,
@@ -27,7 +28,7 @@ export default function DfOsProductPage() {
         <div className="scan-beam opacity-[0.05]" />
         <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-brand-blue/5 rounded-full blur-[100px] pointer-events-none" />
         
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative flex flex-col gap-6 pt-8">
+        <Reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative flex flex-col gap-6 pt-8">
           <Badge variant="blue" className="mx-auto">
             {data.hero.eyebrow}
           </Badge>
@@ -56,7 +57,7 @@ export default function DfOsProductPage() {
           <p className="text-xs text-slate-500 font-mono mt-2">
             {data.hero.trustLine}
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* Section 1: Product Positioning */}

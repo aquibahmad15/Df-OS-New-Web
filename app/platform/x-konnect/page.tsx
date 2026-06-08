@@ -8,6 +8,7 @@ import AnswerBlock from "@/components/seo/AnswerBlock";
 import ProductScreenFrame from "@/components/ui/ProductScreenFrame";
 import StockImage from "@/components/ui/StockImage";
 import { CheckCircle2, Cpu, Radio, Network, Activity, Zap, Shield, Layout } from "lucide-react";
+import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: xKonnectProductData.seo.title,
@@ -38,7 +39,7 @@ export default function XKonnectProductPage() {
         <div className="scan-beam opacity-[0.05]" />
         <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-brand-cyan/5 rounded-full blur-[100px] pointer-events-none" />
         
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative flex flex-col gap-6 pt-8">
+        <Reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative flex flex-col gap-6 pt-8">
           <Badge variant="cyan" className="mx-auto">
             {data.hero.eyebrow}
           </Badge>
@@ -77,7 +78,7 @@ export default function XKonnectProductPage() {
               priority
             />
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Section 1: Product Positioning */}
