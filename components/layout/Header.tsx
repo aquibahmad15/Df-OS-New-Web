@@ -11,17 +11,18 @@ import Button from "../ui/Button";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      const y = window.scrollY;
+      setScrolled(y > 20);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? Math.min(y / max, 1) : 0);
     };
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -47,17 +48,26 @@ export default function Header() {
         <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-cyan/30 to-transparent shadow-[0_1px_8px_rgba(6,182,212,0.2)]" />
       )}
 
+      {/* Scroll-progress indicator — fills as the page is read */}
+      <div
+        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-indigo shadow-[0_0_8px_rgba(6,182,212,0.6)] transition-[width] duration-150 ease-out"
+        style={{ width: `${progress * 100}%` }}
+        aria-hidden="true"
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative flex items-center">
+          <Link href="/" className="flex items-center gap-2 group relative">
+            {/* Soft glow on hover — lifts the mark off the dark bar */}
+            <div className="absolute -inset-3 bg-brand-cyan/10 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="relative flex items-center transition-transform duration-300 group-hover:scale-[1.03]">
               <Image
                 src="/logos/Df-OS final_logo-01.svg"
                 alt="Df-OS Logo"
                 width={120}
                 height={57}
-                className="h-8 w-auto select-none"
+                className={`w-auto select-none relative z-10 transition-all duration-300 ${scrolled ? "h-[42px]" : "h-[55px]"}`}
                 priority
               />
               {/* Pulsing signal dot beside logo */}

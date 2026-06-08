@@ -8,6 +8,8 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import AnswerBlock from "@/components/seo/AnswerBlock";
 import { Shield, CheckCircle2, History, Compass, HeartHandshake, Eye, Award, ArrowRight } from "lucide-react";
+import { RevealStagger, RevealItem } from "@/components/ui/Reveal";
+import MandelbrotStoryVisual from "@/components/about/MandelbrotStoryVisual";
 
 export const metadata: Metadata = {
   title: aboutPageData.seo.title,
@@ -29,34 +31,63 @@ export default function AboutPage() {
 
   return (
     <div className="w-full">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-28 bg-brand-bg blueprint-grid overflow-hidden border-b border-brand-border/40">
-        <div className="particle-grid opacity-[0.8]" />
-        <div className="scan-beam opacity-[0.05]" />
-        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-brand-indigo/5 rounded-full blur-[100px] pointer-events-none" />
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative flex flex-col gap-6 pt-8">
-          <Badge variant="indigo" className="mx-auto">
-            {data.hero.eyebrow}
-          </Badge>
-          
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white leading-tight text-shimmer">
-            {data.hero.headline}
-          </h1>
-          
-          <p className="text-slate-300 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto">
-            {data.hero.subheadline}
-          </p>
+      {/* Hero Section — full-bleed animated Mandelbrot */}
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden border-b border-brand-border/40 bg-[#03060f]">
+        {/* Animated Mandelbrot background */}
+        <MandelbrotStoryVisual background />
 
-          {/* Hero team photography */}
-          <div className="mt-4 max-w-3xl mx-auto w-full rounded-xl overflow-hidden border border-brand-border/30 shadow-2xl shadow-brand-indigo/10">
-            <StockImage
-              src="/images/stock/engineers-robotics.jpg"
-              alt="Engineering team inspecting advanced manufacturing robotics"
-              overlay="gradient"
-              aspectRatio="landscape"
-            />
-          </div>
+        {/* Readability scrims over the bright fractal */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 72% 64% at 50% 46%, rgba(3,6,15,0.64) 0%, rgba(3,6,15,0.26) 46%, transparent 72%)" }}
+        />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#03060f]/85 via-transparent to-[#03060f]" />
+        <div className="absolute inset-0 blueprint-grid opacity-[0.06] pointer-events-none" />
+
+        {/* Equation plate — top-right accent */}
+        <div className="absolute top-24 right-5 sm:right-8 z-10 px-3 py-1.5 rounded-lg bg-[#050a1c]/65 border border-brand-cyan/25 backdrop-blur-sm hidden sm:block">
+          <span className="font-mono text-xs text-brand-cyan tracking-wide">z<sub className="text-[8px]">n+1</sub> = z<sub className="text-[8px]">n</sub>² + c</span>
+        </div>
+
+        {/* Hero content */}
+        <RevealStagger className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center gap-6 pt-24 pb-24">
+          <RevealItem>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#050a1c]/60 border border-brand-cyan/30 backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan signal-dot" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-cyan font-bold">
+                {data.hero.eyebrow}
+              </span>
+            </div>
+          </RevealItem>
+
+          <RevealItem>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.05] text-shimmer drop-shadow-[0_4px_24px_rgba(0,0,0,0.7)]">
+              {data.hero.headline}
+            </h1>
+          </RevealItem>
+
+          <RevealItem>
+            <p className="text-slate-200 text-base md:text-xl leading-relaxed max-w-2xl mx-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+              {data.hero.subheadline}
+            </p>
+          </RevealItem>
+
+          <RevealItem>
+            <p className="text-brand-cyan text-sm md:text-base font-semibold italic tracking-wide drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              Infinite operational structure, from one simple rule.
+            </p>
+          </RevealItem>
+
+          <RevealItem className="flex flex-col sm:flex-row items-center gap-4 justify-center mt-2">
+            <Button href="/contact" variant="primary">Book a Demo</Button>
+            <Button href="/platform/df-os" variant="secondary">Explore the Platform</Button>
+          </RevealItem>
+        </RevealStagger>
+
+        {/* Scroll cue */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-slate-500 pointer-events-none">
+          <span className="text-[9px] font-mono uppercase tracking-[0.25em]">Scroll</span>
+          <span className="w-px h-8 bg-gradient-to-b from-brand-cyan/60 to-transparent" />
         </div>
       </section>
 

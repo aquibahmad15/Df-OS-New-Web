@@ -338,7 +338,7 @@ export default function ContactPage() {
               <h3 className="text-xs font-bold text-white uppercase font-mono tracking-wider flex items-center gap-1.5 border-b border-brand-border/40 pb-3">
                 <ShieldCheck className="w-4 h-4 text-brand-green" /> Compliance & Security
               </h3>
-              <div className="flex flex-col gap-3 text-xs text-slate-400">
+              <div className="flex flex-col gap-3 text-sm text-slate-400">
                 <p>
                   <strong className="text-white">ISO 27001 Certified:</strong> We maintain formal data security, audit tracking, and database isolation credentials.
                 </p>
